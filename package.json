@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/drumath2237/zenn-articles.git",
   "author": "drumath2237 <2237k.drumath@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "zenn-cli": "^0.1.41"
+  }
 }
