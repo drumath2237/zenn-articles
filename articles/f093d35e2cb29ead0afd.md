@@ -65,8 +65,29 @@ unlit なキューブが上に飛んでいくという簡単なものです。
 
 ほとんどデフォルトのものと変わりませんが、特殊な点としては Initialize Particle コンテキストに Inherit Source Color ブロックがあることです。つまり、何かのソースから Color Attribute を継承していることを意味しますね。
 
-次に Timeline 側の準備をします。
+次に Timeline 側の準備をします。VFX Graph がインストールされていれば、以下のように新規トラック作成のメニューに「Visual Effect Activation Track」というものが追加されていますので、こちらをクリックします。
 
+![vfx activation track](https://storage.googleapis.com/zenn-user-upload/596wze1h9olkj4n0n6fnby71gpns)
+
+クリップを作成する前に、シーン上の VFX Graph を指定するのを忘れないようにしましょう。
+
+![vfx set](https://storage.googleapis.com/zenn-user-upload/faf26lppgbpoc9u3vgluflxpgp3i)
+
+作成した Visual Effect Activation Track で右クリックをすると以下のようなメニューが出てくるので、「Add Visual Effect Activation Clip」を押すことで、クリップが作成されます。
+
+![add clip](https://storage.googleapis.com/zenn-user-upload/84vdkjcomamfu8xz0wzlhw6hzj36)
+
+こんな感じに適当にクリップを並べて、それぞれのクリップをインスペクタで編集していきます。
+
+![put clips](https://storage.googleapis.com/zenn-user-upload/byfjrwv7enndst4ggptcphvs91wd)
+
+インスペクタではクリップの開始と終了で発火するイベント名と、Event Attribute を指定できるので、こんな感じに設定してやります。
+
+![set inspector](https://storage.googleapis.com/zenn-user-upload/v6e5rbfylxu00xnx8ymbqatdr4rq)
+
+他のクリップも同様に編集していき、これを再生してみると以下のような動作をします。
+
+@[youtube](Nw1je_OruwU)
 
 ## Animation Trackを使う
 
