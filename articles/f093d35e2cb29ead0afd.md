@@ -43,9 +43,8 @@ Zenn 初記事となります、よろしくお願いいたします。
 |:---:|:---:|
 |OS|Windows 10 Home|
 |Unity|2019.4.12f|
-|URP||
-|VFX Graph||
-
+|URP|7.3.1|
+|VFX Graph|7.3.1|
 
 # VFX GraphをTimelineで制御する方法
 
@@ -53,11 +52,21 @@ VFX Graph を Timeline で制御する方法はパッと思いつくもので３
 
 ## Visual Effect Activation Trackを使う
 
-VFX Graph をプロジェクトにインポートすると、Visual Effect Activation というアニメーショントラックが Timeline で使用できるようになります。
+VFX Graph をプロジェクトにインポートすると、Visual Effect Activation Track というアニメーショントラックが Timeline で使用できるようになります。
 これを使うと、特定の VFX Graph に対してアニメーションクリップの始まりと終わりでイベントを発火させることができるようになります。
 特に設定しなければ、クリップの始まりで`OnPlay`が、クリップの最後に`OnStop`が発火します。
-VFX Graph では特定のイベントが起きたときにパーティクルを発生させたり止めたりでいるので、時系列で制御したい時にとても便利です。
+
 また、イベントの発生とともにいくつかのプロパティも一緒に渡すことができるので、クリップごとに違う動作をさせることも可能になっています。
+
+まず、以下のような簡単な VFX Graph を作成してみます。
+unlit なキューブが上に飛んでいくという簡単なものです。
+
+![simple vfx](https://storage.googleapis.com/zenn-user-upload/ou61tq4e2rxeevunsxj1trn2g7vs)
+
+ほとんどデフォルトのものと変わりませんが、特殊な点としては Initialize Particle コンテキストに Inherit Source Color ブロックがあることです。つまり、何かのソースから Color Attribute を継承していることを意味しますね。
+
+次に Timeline 側の準備をします。
+
 
 ## Animation Trackを使う
 
