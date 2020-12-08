@@ -1,8 +1,8 @@
 ---
-title: "【Unity】VFX GraphをTimelineで制御する"
+title: "【Unity】VFX GraphのイベントをTimelineで制御する"
 emoji: "✨"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
+topics: ["unity", "vfx", "timeline", "particle"]
 published: false
 ---
 
@@ -13,26 +13,18 @@ published: false
 どうも、[にー兄さん](https://twitter.com/ninisan_drumath)です。
 Zenn 初記事となります、よろしくお願いいたします。
 
-自分は Unity で VFX Graph を使うことが好きなのですが、表現力の高い VFX を作るのに Timeline が使えそうなので、せっかくなので記事にしました。小ネタですが最後までお付き合いいただけると嬉しいです。
+自分は Unity で VFX Graph を使うことが好きなのですが、表現力の高い VFX を作るのに Timeline が使えそうということで、せっかくなので記事にしようと思いました。小ネタですが最後までお付き合いいただけると嬉しいです。
 
 ## TL;DR
 
-- VFX Graph ではデフォルトで Timeline 制御できるしくみがある
-- Timeline 拡張によってより高度な制御も可能
-
-## この記事で得られる知見
-
-以下のような知見が得られます。
-
-- VFX Graph に簡単な Timeline 制御を加える方法
-- 高度な Timeline 制御をする方法案
+VFX Graph ではデフォルトで Timeline を制御できるしくみがあるらしい。
 
 ## 対象読者
 
 対象読者は以下の通りです。
 
-- VFX Graph を触ったことがある or 興味がある
-- Timeline を触ったことがある or 興味がある
+- VFX Graph を触ったことがある
+- Timeline を触ったことがある
 - Unity を触ったことがある(SRP を使ったことがあればベスト)
 
 ## 検証環境
@@ -46,17 +38,13 @@ Zenn 初記事となります、よろしくお願いいたします。
 |URP|7.3.1|
 |VFX Graph|7.3.1|
 
-# VFX GraphをTimelineで制御する方法
+# Visual Effect Activation Trackを使ったVFXの制御
 
-VFX Graph を Timeline で制御する方法はパッと思いつくもので３つあります。
-
-## Visual Effect Activation Trackを使う
-
-VFX Graph をプロジェクトにインポートすると、Visual Effect Activation Track というアニメーショントラックが Timeline で使用できるようになります。
-これを使うと、特定の VFX Graph に対してアニメーションクリップの始まりと終わりでイベントを発火させることができるようになります。
+VFX Graph をプロジェクトにインポートすると、Visual Effect Activation Track というトラックが Timeline で使用できるようになります。
+これを使うと、特定の VFX Graph に対してクリップの始まりと終わりでイベントを発火させることができるようになります。
 特に設定しなければ、クリップの始まりで`OnPlay`が、クリップの最後に`OnStop`が発火します。
 
-また、イベントの発生とともにいくつかのプロパティも一緒に渡すことができるので、クリップごとに違う動作をさせることも可能になっています。
+また、イベントの発生とともにいくつかの属性も一緒に渡すことができるので、クリップごとに違う動作をさせることも可能になっています。
 
 まず、以下のような簡単な VFX Graph を作成してみます。
 unlit なキューブが上に飛んでいくという簡単なものです。
@@ -69,7 +57,8 @@ unlit なキューブが上に飛んでいくという簡単なものです。
 
 ![vfx activation track](https://storage.googleapis.com/zenn-user-upload/596wze1h9olkj4n0n6fnby71gpns)
 
-クリップを作成する前に、シーン上の VFX Graph を指定するのを忘れないようにしましょう。
+トラックを作成すると、シーン上の VFX Graph を指定できるようになります。
+先ほど作った簡単な VFX Graph をシーンに配置して、それを指定しましょう。
 
 ![vfx set](https://storage.googleapis.com/zenn-user-upload/faf26lppgbpoc9u3vgluflxpgp3i)
 
@@ -81,26 +70,37 @@ unlit なキューブが上に飛んでいくという簡単なものです。
 
 ![put clips](https://storage.googleapis.com/zenn-user-upload/byfjrwv7enndst4ggptcphvs91wd)
 
-インスペクタではクリップの開始と終了で発火するイベント名と、Event Attribute を指定できるので、こんな感じに設定してやります。
+インスペクタではクリップの開始と終了で発火するイベント名と、Event Attribute を指定できます。
+今回はイベントの発火と共に、VFX の Color 属性を指定してみましょう。「Enter Event Attributes」の「＋」ボタンを押すと色々な属性が出てくるので、Color を選択し、適当な色を指定します。ここは HDR じゃないんですね、、、。
 
 ![set inspector](https://storage.googleapis.com/zenn-user-upload/v6e5rbfylxu00xnx8ymbqatdr4rq)
 
 他のクリップも同様に編集していき、これを再生してみると以下のような動作をします。
+クリップが始まると指定した色と共にパーティクルがスポーンし、クリップの終わりと同時にパーティクルがスポーンしなくなりますね。
 
 @[youtube](Nw1je_OruwU)
+
+# 余談：その他VFX Graph + Timeline制御の方法
 
 ## Animation Trackを使う
 
 VFX Graph に限らず Animator コンポーネントがアタッチされている GameObject は、インスペクタから設定できる値を Timeline で Recording できます。
 VFX Graph も同様で、インスペクタから設定できるプロパティは AnimationTrack からキーフレームを指定して録画できます。
 
+:::message
+HDRP を使っている場合、Timeline の Record 機能がうまく機能しないといった issue を見たことがあります。使う際はご注意ください。
+:::
+
 ## Timeline拡張を作る
 
 前述した２つの方法で物足りないと感じた人は、Timeline 拡張を作ることで大体は解決できる可能性が高いです。
 Timeline 拡張とは、Playable 系のインタフェースを継承したクラスを実装することですることにより、Timeline で使える Track や Clip を自作できる Unity の仕組みになります。これを使えばスクリプトで制御できる VFXGraph の API を Timeline でも設定できるようになります。
-Timeline 拡張の作り方を説明してしまうと、それこそ記事が１本書けてしまうので他の記事を参照されたいです。
 
-# まとめ・おわりに
+# おわりに
+
+VFX Graph はリリースされてから時間があまりたっていないので知見や文献が少ないこともありますが、とても素晴らしいパッケージなので情報を追っていきたいです。
+
+(アドカレ投稿が遅れてしまって申し訳ございませんでした......)
 
 ## 参考
 
