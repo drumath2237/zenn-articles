@@ -1,0 +1,21 @@
+{
+  "name": "zenn-articles",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/drumath2237/zenn-articles.git",
+  "author": "drumath2237 <2237k.drumath@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "preview": "yarn zenn preview",
+    "new": "yarn zenn new:article"
+  },
+  "dependencies": {
+    "zenn-cli": "^0.1.41"
+  },
+  "devDependencies": {
+    "textlint": "^11.7.6",
+    "textlint-rule-preset-ja-spacing": "^2.0.2",
+    "textlint-rule-preset-ja-technical-writing": "^4.0.1",
+    "textlint-rule-spellcheck-tech-word": "^5.0.0"
+  }
+}
