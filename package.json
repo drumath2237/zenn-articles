@@ -6,8 +6,8 @@
   "author": "drumath2237 <2237k.drumath@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "preview": "yarn zenn preview",
-    "new": "yarn zenn new:article"
+    "preview": "zenn preview",
+    "new": "zenn new:article"
   },
   "dependencies": {
     "zenn-cli": "^0.1.41"
