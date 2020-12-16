@@ -6,16 +6,18 @@
   "author": "drumath2237 <2237k.drumath@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "preview": "yarn zenn preview",
-    "new": "yarn zenn new:article"
+    "preview": "zenn preview",
+    "new": "zenn new:article"
   },
   "dependencies": {
-    "zenn-cli": "^0.1.41"
+    "gitmoji-c": "^0.2.1",
+    "zenn-cli": "^0.1.62"
   },
   "devDependencies": {
     "textlint": "^11.7.6",
     "textlint-rule-preset-ja-spacing": "^2.0.2",
     "textlint-rule-preset-ja-technical-writing": "^4.0.1",
-    "textlint-rule-spellcheck-tech-word": "^5.0.0"
+    "textlint-rule-spellcheck-tech-word": "^5.0.0",
+    "textlint-filter-rule-allowlist": "^2.0.1"
   }
 }
