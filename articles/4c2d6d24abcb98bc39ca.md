@@ -6,7 +6,7 @@ topics: ["minecraft", "azure", "docker", "アドベントカレンダー2020"]
 published: false
 ---
 
-この記事は[Azureアドベントカレンダー]()および[愚者っとCorp.アドベントカレンダー]()の 20 日目の記事です。
+この記事は[Azureアドベントカレンダー](https://qiita.com/advent-calendar/2020/azure)および[愚者っとCorp.アドベントカレンダー](https://adventar.org/calendars/5126)の 20 日目の記事です。
 
 # はじめに
 
@@ -99,13 +99,12 @@ res=$(az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $
 # ...
 ```
 
-色々書いてありますが、大雑把に呼んでみると以下の手順を実行することにより
-マイクラ鯖をホストできることが分かります。
+色々書いてありますが、大雑把に読んでみると以下の手順を実行していることが分かります。
 
 1. リソースグループの作成
-2. Storage Account の作成
+2. Azure Storage Account の作成
 3. ファイル共有の作成(設定)
-4. Container Instances の作成
+4. Azure Container Instances の作成
 
 ということで、これらをやっていきましょう。構成は以下の通りです。
 ![diagram](https://storage.googleapis.com/zenn-user-upload/4pujmjmki8v555a1y5tp63ijznjd)
