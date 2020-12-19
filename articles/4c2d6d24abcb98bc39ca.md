@@ -50,13 +50,13 @@ published: false
 @[youtube](-D9kfLLCZys)
 ということでまずはこの動画について少し説明します。
 
-動画では、りおさんというつよつよエンジニアの方が作ったデプロイスクリプトを使ってコンテナのデプロイを行っていました。
+動画では、りおさんというつよつよエンジニアの方が作った[こちらのデプロイスクリプト](https://github.com/rioriost/deploy_minecraft/blob/master/create_minecraft.sh)を使ってコンテナのデプロイを行っていました。
 実際このスクリプトを動かせば今回紹介する内容はすべて実現できるわけですが、正直何が起こってるのかよくわからず実行するのが怖いです。
 ということで、スクリプトから作業手順を読み解き、Azure Portal で手を動かしながらやってみようと思いました。
 
-デプロイスクリプトの主要部分を引用します。
+スクリプトの主要部分を引用します。
 
-```sh
+```sh: create_minecraft.sh
 # ...
 
 echo "Creating Resource Group..."
@@ -110,11 +110,43 @@ res=$(az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $
 ということで、これらをやっていきましょう。構成は以下の通りです。
 ![diagram](https://storage.googleapis.com/zenn-user-upload/4pujmjmki8v555a1y5tp63ijznjd)
 
+## リソースグループの作成
 
+デプロイスクリプトで言うところの下の部分に当たります。
+
+```bash
+az group create -l $ACI_RES_LOC -g $ACI_RES_GRP -o tsv --query "properties.provisioningState"
+```
 
 ## Storage Accoutの作成と設定
 
+デプロイスクリプトで言うところの下記の部分に該当します。
+
+```bash
+az storage account create -g $ACI_RES_GRP -n $ACI_STR_AN -l $ACI_RES_LOC --sku Premium_LRS --kind FileStorage -o tsv --query "provisioningState"
+```
+
+```bash
+az storage share create -n $ACI_STR_SH_NAME --account-name $ACI_STR_AN -o tsv --query "created"
+```
+
 ## Container Instancesを使ったコンテナのデプロイ
+
+デプロイスクリプトの下記部分の処理をしていきます。
+
+```bash
+az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $ACI_CNT_NAME \
+	--ip-address Public --ports 25565 25575 \
+	--dns-name-label $ACI_CNT_NAME \
+	--cpu 2 --memory 8 \
+	-e EULA=TRUE ENABLE_RCON=true \
+	RCON_PASSWORD=$RCON_PASSWORD \
+	--azure-file-volume-account-name $ACI_STR_AN \
+	--azure-file-volume-account-key "$STORAGE_KEY" \
+	--azure-file-volume-share-name $ACI_STR_SH_NAME \
+	--azure-file-volume-mount-path /data/ \
+	-o tsv --query "provisioningState"
+```
 
 # おわりに
 
