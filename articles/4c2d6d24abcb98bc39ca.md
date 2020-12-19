@@ -30,6 +30,8 @@ published: false
 - Azure Container Instances が気になる
 - Azure で何かやってみたい
 
+そもそも自分が Docker、Azure、マイクラ鯖を運用すること自体が初めてだったので、結構初心者向けになるはずです。
+
 ## 検証環境
 
 検証環境は以下の通りです。といっても作業は全部クラウドでやるのであまり関係ないですね。
@@ -44,8 +46,70 @@ published: false
 
 ## 技術構成やプラン
 
-今回の記事ですが、クラウドデベロッパーチャンネル(通称くらでべ)のこの動画で紹介されている内容あ元ネタだったりします。
-自分がクラウド初心者だったりマイクラ鯖を立てるのが初めてだったりするので、まずは色々調べるところからスタートです。
+今回の記事ですが、クラウドデベロッパーチャンネル(通称くらでべ)の[この動画](https://www.youtube.com/watch?v=-D9kfLLCZys)で紹介されている内容が元ネタだったりします。
+@[youtube](-D9kfLLCZys)
+ということでまずはこの動画について少し説明します。
+
+### くらでべの内容を紐解く
+
+先の動画では、りおさんというつよつよエンジニアの方が作ったデプロイスクリプトを使ってコンテナのデプロイを行っていました。
+実際このスクリプトを動かせば今回紹介する内容はすべて実現できるわけですが、正直何が起こってるのかよくわからず実行するのが怖いです。
+ということで、スクリプトから作業手順を読み解き、Azure Portal で手を動かしながらやってみようと思いました。
+
+デプロイスクリプトの主要部分を引用します。
+
+```sh
+# ...
+
+echo "Creating Resource Group..."
+res=$(az group create -l $ACI_RES_LOC -g $ACI_RES_GRP -o tsv --query "properties.provisioningState")
+if [ "$res" != "Succeeded" ]; then
+	exit
+fi
+
+# Create the storage account with the parameters
+echo "Creating Storage Account..."
+res=$(az storage account create -g $ACI_RES_GRP -n $ACI_STR_AN -l $ACI_RES_LOC --sku Premium_LRS --kind FileStorage -o tsv --query "provisioningState")
+if [ "$res" != "Succeeded" ]; then
+	az group delete --yes --no-wait -g $ACI_RES_GRP
+	exit
+fi
+
+# Create the file share
+echo "Creating Storage Share..."
+res=$(az storage share create -n $ACI_STR_SH_NAME --account-name $ACI_STR_AN -o tsv --query "created")
+if [ "$res" != "true" ]; then
+	az group delete --yes --no-wait -g $ACI_RES_GRP
+	exit
+fi
+STORAGE_KEY=$(az storage account keys list -g $ACI_RES_GRP --account-name $ACI_STR_AN --query "[0].value" -o tsv)
+
+# Create the container
+echo "Creating Container..."
+res=$(az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $ACI_CNT_NAME \
+	--ip-address Public --ports 25565 25575 \
+	--dns-name-label $ACI_CNT_NAME \
+	--cpu 2 --memory 8 \
+	-e EULA=TRUE ENABLE_RCON=true \
+	RCON_PASSWORD=$RCON_PASSWORD \
+	--azure-file-volume-account-name $ACI_STR_AN \
+	--azure-file-volume-account-key "$STORAGE_KEY" \
+	--azure-file-volume-share-name $ACI_STR_SH_NAME \
+	--azure-file-volume-mount-path /data/ \
+	-o tsv --query "provisioningState")
+
+# ...
+```
+
+色々書いてありますが、大雑把に言うと
+
+1. リソースグループの作成
+2. Storage Account の作成
+3. ファイル共有の作成(設定)
+4. Container Instances の作成
+
+という感じになります。
+
 
 ## Storage Accoutの作成
 
