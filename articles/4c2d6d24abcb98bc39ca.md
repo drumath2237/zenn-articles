@@ -50,9 +50,7 @@ published: false
 @[youtube](-D9kfLLCZys)
 ということでまずはこの動画について少し説明します。
 
-### くらでべの内容を紐解く
-
-先の動画では、りおさんというつよつよエンジニアの方が作ったデプロイスクリプトを使ってコンテナのデプロイを行っていました。
+動画では、りおさんというつよつよエンジニアの方が作ったデプロイスクリプトを使ってコンテナのデプロイを行っていました。
 実際このスクリプトを動かせば今回紹介する内容はすべて実現できるわけですが、正直何が起こってるのかよくわからず実行するのが怖いです。
 ということで、スクリプトから作業手順を読み解き、Azure Portal で手を動かしながらやってみようと思いました。
 
@@ -101,17 +99,20 @@ res=$(az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $
 # ...
 ```
 
-色々書いてありますが、大雑把に言うと
+色々書いてありますが、大雑把に呼んでみると以下の手順を実行することにより
+マイクラ鯖をホストできることが分かります。
 
 1. リソースグループの作成
 2. Storage Account の作成
 3. ファイル共有の作成(設定)
 4. Container Instances の作成
 
-という感じになります。
+ということで、これらをやっていきましょう。構成は以下の通りです。
+![diagram](https://storage.googleapis.com/zenn-user-upload/4pujmjmki8v555a1y5tp63ijznjd)
 
 
-## Storage Accoutの作成
+
+## Storage Accoutの作成と設定
 
 ## Container Instancesを使ったコンテナのデプロイ
 
