@@ -117,6 +117,17 @@ res=$(az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $
 az group create -l $ACI_RES_LOC -g $ACI_RES_GRP -o tsv --query "properties.provisioningState"
 ```
 
+まずは今回作るリソースを管理するためのリソースグループを作っていきます。
+設定する項目は以下の通りです。
+
+- リージョンの場所
+- リソースグループ名
+
+リソースの作成ボタン->「リソースグループ」を検索->作成ボタン
+クリックしていき、リソースグループの名前とリージョンを設定します。
+今回は東日本リージョンで、「zenn-minecraft-tutorial」というリソースグループを作ります。
+![asxa](https://storage.googleapis.com/zenn-user-upload/arhcq46ryaxyd59iusfbpp9i9re8)
+
 ## Storage Accoutの作成と設定
 
 デプロイスクリプトで言うところの下記の部分に該当します。
@@ -128,6 +139,34 @@ az storage account create -g $ACI_RES_GRP -n $ACI_STR_AN -l $ACI_RES_LOC --sku P
 ```bash
 az storage share create -n $ACI_STR_SH_NAME --account-name $ACI_STR_AN -o tsv --query "created"
 ```
+
+Azure Storage Account というものを作ります。Azure Storage Accout とは、Azure 上のリソースで使えるデータを保存する機構のようなものだと思います。
+基本コンテナではデータは永続的に保存はできないので、コンテナを停止、再起動したときにちゃんと前回のプレイデータが復元できるようにストレージアカウントに保存しておきます。
+
+Azure Storage Accout にはファイル共有という機能があり、それを使うことによって Container Instances でストレージをマウントします。
+
+まずはストレージアカウントを検索して作成ボタンを押し、デプロイスクリプトに基づいて以下のように設定していきます。
+
+![xsaxa](https://storage.googleapis.com/zenn-user-upload/yoj2gpzge2egzx7q6gu7xcn8eu4k)
+
+設定項目を下記に記します。
+
+|項目|値|
+|:--:|:--:|
+|リソースグループ|↑で作ったリソースグループを指定|
+|ストレージアカウント名|zennminecraft(小文字と数字しか使えないので注意)|
+|場所|東日本|
+|パフォーマンス|Standard|
+|アカウントの種類|汎用 v2|
+|レプリケーション|ローカル冗長ストレージ(LRS)|
+
+表にあるように、基本タブ以外はとくにいじらなくて大丈夫です。このまま確認とリソースの作成をしてしまいましょう。
+リソースが作成出来たら、ファイル共有の設定をしていきます。
+サイドバーにある「ファイル共有」という項目をクリックし、「＋ファイル共有」から適当な名前で作成します。
+![あｓぁｓぁ](https://storage.googleapis.com/zenn-user-upload/gvxmmhffewrswcbes4b4pui8qcaq)
+今回は「zenn-minecraft-file-share」という名前にしました。
+![asdf](https://storage.googleapis.com/zenn-user-upload/pn4m1ng6byf47py63k2qzkekfmo3)
+
 
 ## Container Instancesを使ったコンテナのデプロイ
 
