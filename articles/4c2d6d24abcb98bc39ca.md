@@ -3,7 +3,7 @@ title: "Azureでマイクラ鯖をホストする"
 emoji: "🐳"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["minecraft", "azure", "docker", "アドベントカレンダー2020"]
-published: false
+published: true
 ---
 
 この記事は[Azureアドベントカレンダー](https://qiita.com/advent-calendar/2020/azure)および[愚者っとCorp.アドベントカレンダー](https://adventar.org/calendars/5126)の 20 日目の記事です。
