@@ -26,7 +26,7 @@ published: false
 
 - マイクラをプレイしたことがある
 - Azure を使ったことがある、もしくはどんなものか知っている
-- とりあえずマイクラをみんなでやりたいけど自分で管理もしたい
+- とりあえずマイクラをみんなでやりたいけど自分でサーバー管理もしたい
 - Azure Container Instances が気になる
 - Azure で何かやってみたい
 
@@ -36,7 +36,7 @@ published: false
 
 検証環境は以下の通りです。といっても作業は全部クラウドでやるのであまり関係ないですね。
 
-|||
+||環境|
 |:--:|:--:|
 |Azure サブスク|Azure for Student|
 |マイクラ鯖用コンテナ|[itzg/docker-minecraft-server](https://github.com/itzg/docker-minecraft-server)|
@@ -46,7 +46,7 @@ published: false
 
 ## 技術構成やプラン
 
-今回の記事ですが、クラウドデベロッパーチャンネル(通称くらでべ)の[この動画](https://www.youtube.com/watch?v=-D9kfLLCZys)で紹介されている内容が元ネタだったりします。
+今回の記事ですが、クラウドデベロッパーチャンネル(通称くらでべ)の[この動画](https://www.youtube.com/watch?v=-D9kfLLCZys)が元ネタだったりします。
 @[youtube](-D9kfLLCZys)
 ということでまずはこの動画について少し説明します。
 
@@ -82,7 +82,7 @@ if [ "$res" != "true" ]; then
 fi
 STORAGE_KEY=$(az storage account keys list -g $ACI_RES_GRP --account-name $ACI_STR_AN --query "[0].value" -o tsv)
 
-# Create the container
+# Create the container  
 echo "Creating Container..."
 res=$(az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $ACI_CNT_NAME \
 	--ip-address Public --ports 25565 25575 \
@@ -209,8 +209,8 @@ https://github.com/rioriost/deploy_minecraft
 ### Container Instances の作成
 
 さていよいよ最後のタスクである Container Instances の作成になります。
-他のリソースと同じように Container Instances も Azure Portal から作成できるのですが、今回は Storage Account のボリュームをマウントする必要があるため、
-普通にできなかっかったです。(少なくとも自分はやり方を調べても出てきませんでした。もし知ってる方がいらっしゃったら教えてほしいです)
+他のリソースと同じように Container Instances も Azure Portal から作成できるのですが、今回は Storage Account のボリュームをマウントする必要があるため、普通にできなかっかったです。
+(少なくとも自分はやり方を調べても出てきませんでした。もし知ってる方がいらっしゃったら教えてほしいです)
 
 ではどうするのかというと、Resource Manager テンプレートを利用します。
 Resource Manager テンプレートとは、リソースに必要な設定を JSON で記述し、それをもとにリソースを作成するシステムのことです。
