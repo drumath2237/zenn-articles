@@ -186,6 +186,36 @@ az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $ACI_CN
 	-o tsv --query "provisioningState"
 ```
 
+デプロイスクリプトでは、docker イメージ、リソースグループ、コンテナ名、ip、解放ポート、dns ラベル、
+リソースのスペック、環境変数、ボリュームのマウントなどを設定しています。
+基本的にはこのスクリプトに沿って行くのですが、自分が調べた結果いくつか変更したい箇所があります。
+
+### マイクラ鯖のdockerイメージ
+
+マイクラ鯖用の docker イメージで一番有名なのは、[itzgさんという方のdocker-minecraft-server](https://github.com/itzg/docker-minecraft-server)というリポジトリのモノっぽいです。
+今回のデプロイスクリプトではりおさんが作られた docker イメージを指定されていますが、こちらのイメージも実は itzg さんの docker イメージをフォークして作られたものでした。
+りおさんの docker イメージは 2 年前くらいに変更されたものらしく、その後に dork 元のイメージではいろいろ変更が加わっていました。
+その結果、環境変数を docker 起動時に変更すればマイクラ鯖の設定を柔軟にいじれるようになったみたいです。
+りおさんのイメージではマイクラ鯖のメモリ上限を dockerfile を変更して設定していましたが、普通に環境変数によってそれが可能になっています。
+ということで、りおさんの docker イメージではなく itzg さんのイメージを利用することにしました。
+
+### リソースのスペック
+
+スクリプトでは 2 コアの vCPU と 8GB のメモリを指定していますが、まぁそこまでいらないかなぁと思ったので、
+1 コア vCPU と 2GB メモリでやってみます。多分大丈夫。
+
+### Container Instances の作成
+
+さていよいよ最後のタスクである Container Instances の作成になります。
+他のリソースと同じように Container Instances も Azure Portal から作成できるのですが、今回は Storage Account のボリュームをマウントする必要があるため、
+普通にできなかっかったです。(少なくとも自分はやり方を調べても出てきませんでした。もし知ってる方がいらっしゃったら教えてほしいです)
+
+ではどうするのかというと、Resource Manager テンプレートを利用します。
+Resource Manager テンプレートとは、リソースに必要な設定を JSON で記述し、それをもとにリソースを作成するシステムのことです。
+詳しくは[こちら](https://azure.microsoft.com/ja-jp/services/arm-templates/)をご覧ください。
+Container Instances のドキュメントにストレージアカウントのボリュームをマウントするときのサンプルが載っているので、そちらを参考に JSON ファイルを作成します。
+
+
 # おわりに
 
 素人なりに、ひととおり Azure Container Instances にマイクラ鯖をデプロイしてホストするまでをやりました。
