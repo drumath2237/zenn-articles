@@ -193,8 +193,10 @@ az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $ACI_CN
 ### マイクラ鯖のdockerイメージ
 
 マイクラ鯖用の docker イメージで一番有名なのは、[itzgさんという方のdocker-minecraft-server](https://github.com/itzg/docker-minecraft-server)というリポジトリのモノっぽいです。
+https://github.com/itzg/docker-minecraft-server
 今回のデプロイスクリプトではりおさんが作られた docker イメージを指定されていますが、こちらのイメージも実は itzg さんの docker イメージをフォークして作られたものでした。
-りおさんの docker イメージは 2 年前くらいに変更されたものらしく、その後に dork 元のイメージではいろいろ変更が加わっていました。
+https://github.com/rioriost/deploy_minecraft
+りおさんの docker イメージは 2 年前くらいに変更されたものらしく、その後に fork 元のイメージではいろいろ変更が加わっていました。
 その結果、環境変数を docker 起動時に変更すればマイクラ鯖の設定を柔軟にいじれるようになったみたいです。
 りおさんのイメージではマイクラ鯖のメモリ上限を dockerfile を変更して設定していましたが、普通に環境変数によってそれが可能になっています。
 ということで、りおさんの docker イメージではなく itzg さんのイメージを利用することにしました。
@@ -213,7 +215,177 @@ az container create --image rioriost/minecraft-server -g $ACI_RES_GRP -n $ACI_CN
 ではどうするのかというと、Resource Manager テンプレートを利用します。
 Resource Manager テンプレートとは、リソースに必要な設定を JSON で記述し、それをもとにリソースを作成するシステムのことです。
 詳しくは[こちら](https://azure.microsoft.com/ja-jp/services/arm-templates/)をご覧ください。
-Container Instances のドキュメントにストレージアカウントのボリュームをマウントするときのサンプルが載っているので、そちらを参考に JSON ファイルを作成します。
+https://azure.microsoft.com/ja-jp/services/arm-templates/
+Container Instances のドキュメントに[ストレージアカウントのボリュームをマウントするときのサンプル](https://docs.microsoft.com/ja-jp/azure/container-instances/container-instances-volume-azure-files#deploy-container-and-mount-volume---resource-manager)が載っているので、そちらを参考に JSON ファイルを作成します。
+https://docs.microsoft.com/ja-jp/azure/container-instances/container-instances-volume-azure-files#deploy-container-and-mount-volume---resource-manager
+
+今回作成する Container Instances の設定項目を下記にまとめました。
+
+|項目|設定した値|
+|:---:|:---:|
+|イメージ|itzg/docker-minecraft-server|
+|リソースグループ|さっき作った zenn-minecraft-tutorial|
+|コンテナの名前|zenn-minecraft-container|
+|IP の設定|Public|
+|Port|25565, 25575|
+|DNS ラベル|zenn-minecraft-tutorial|
+|CPU とメモリ|1 コア vCPU と 2GB メモリ|
+|環境変数|いろいろあるので詳細後述|
+|ボリュームのマウント設定||
+|ファイル共有|さっき作った zenn-miencraft-file-share|
+|ストレージアカウント名|さっき作った zennminecraft|
+|ストレージアカウントキー|ストレージアカウントのアクセスキー|
+
+ストレージアカウントのアクセスキーは zennminecraft ストレージアカウントの画面サイドバーにある「アクセスキー」というやつの中にある Key1 のキーをコピーしましょう。
+
+Docker コンテナを起動するときの環境変数を下記に記します。
+環境変数に関しては、itzg/docker-minecraft-server の GitHub にフルドキュメントがあるみたいなので参考になさってください。
+
+|name|value|備考|
+|:--:|:--:|:--|
+|EULA|TRUE|マイクラの利用規約的なもの|
+|ENABLE_RCON|true|外部からコマンドを使えるようにするやつ|
+|RCON_PASSWORD|自分で設定||
+|MAX_MEMORY|1G|マイクラが使用するメモリ上限|
+|VERSION|お好きなバージョンで|執筆当時は 1.16.4 が最新。Latest で最新バージョンを指定できます。|
+|SEED|お好きなシード値||
+
+メモリの上限は、マイクラ鯖以外のプロセスも走ることを考えて 1G にしました。
+上限指定しないと結構鯖が不安定になるので、設定しておきましょう。
+
+さて、これらを Resource Manager テンプレートで設定してみましょう。
+まずはリソースの作成->「テンプレート」で検索->「テンプレートのデプロイ」をクリック
+そうすると、以下のような画面がでるので「エディターで独自のテンプレートを作成する」をクリックします。
+![ahaha](https://storage.googleapis.com/zenn-user-upload/8qrb875gf7nrsb7vmbfhl5a73j5i)
+
+するとテキストエディタが開くので、その中に JSON を記述していきます。
+その結果を以下に記します。
+
+:::details JSONテンプレート
+```json
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "containerGroups_name": {
+            "defaultValue": "zenn-minecraft-container",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2019-12-01",
+            "name": "[parameters('containerGroups_name')]",
+            "location": "japaneast",
+            "properties": {
+                "sku": "Standard",
+                "containers": [
+                    {
+                        "name": "[parameters('containerGroups_name')]",
+                        "properties": {
+                            "image": "itzg/minecraft-server",
+                            "ports": [
+                                {
+                                    "port": 25565
+                                },
+                                {
+                                    "port": 25575
+                                }
+                            ],
+                            "environmentVariables": [
+                                {
+                                    "name": "EULA",
+                                    "value": "TRUE"
+                                },
+                                {
+                                    "name": "ENABLE_RCON",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "RCON_PASSWORD",
+                                    "value": "変更してください"
+                                },
+                                {
+                                    "name": "MEMORY",
+                                    "value": "1G"
+                                },
+                                {
+                                    "name": "MAX_MEMORY",
+                                    "value": "1G"
+                                },
+                                {
+                                    "name": "VERSION",
+                                    "value": "1.16.4"
+                                },
+                                {
+                                    "name": "SEED",
+                                    "value": "0123456789"
+                                }
+                            ],
+                            "resources": {
+                                "requests": {
+                                    "memoryInGB": 2,
+                                    "cpu": 1
+                                }
+                            },
+                            "volumeMounts": [
+                                {
+                                    "name": "filesharevolume",
+                                    "mountPath": "/data"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "initContainers": [],
+                "ipAddress": {
+                    "ports": [
+                        {
+                            "protocol": "TCP",
+                            "port": 25565
+                        },
+                        {
+                            "protocol": "TCP",
+                            "port": 25575
+                        }
+                    ],
+                    "type": "Public",
+                    "dnsNameLabel": "zenn-minecraft-tutorial"
+                },
+                "osType": "Linux",
+                "volumes": [
+                    {
+                        "name": "filesharevolume",
+                        "azureFile": {
+                            "shareName": "zenn-minecraft-file-share",
+														"storageAccountName": "zennminecraft",
+														"storageAccountKey": "変更してください"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
+```
+:::
+
+保存をするとこのような画面になるので、リソースグループを指定して、作成しましょう。
+![asxa](https://storage.googleapis.com/zenn-user-upload/ooput9o0owa7d6571xs0ll50vqve)
+
+デプロイが完了したら、コンテナのページに行って、URL をコピーします。
+
+![asxasx](https://storage.googleapis.com/zenn-user-upload/kjtpz412wcpkhrfohd6d5oilacxs)
+
+そしてこの URL でマイクラ鯖にインしてみると......。
+
+![mine](https://storage.googleapis.com/zenn-user-upload/jc2sm47iw9b8wiy7cpdjowqgiqsd)
+
+やった～～。
+
+
 
 
 # おわりに
