@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "preview": "zenn preview",
-    "new": "zenn new:article"
+    "new": "zenn new:article",
+    "lint": "textlint ./articles/*.md"
   },
   "dependencies": {
     "gitmoji-c": "^0.2.1",
