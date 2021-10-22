@@ -317,11 +317,6 @@
   resolved "https://registry.yarnpkg.com/@textlint/utils/-/utils-1.2.5.tgz#1406e179d44d130d8e60322f3f873a721c93ba75"
   integrity sha512-2vgz4x3tKK+R9N0OlOovJClRCHubxZi86ki218cvRVpoU9pPrHwkwZud+rjItDl2xFBj7Gujww7c0W1wyytWVQ==
 
-"@types/prismjs@^1.16.1":
-  version "1.16.6"
-  resolved "https://registry.yarnpkg.com/@types/prismjs/-/prismjs-1.16.6.tgz#377054f72f671b36dbe78c517ce2b279d83ecc40"
-  integrity sha512-dTvnamRITNqNkqhlBd235kZl3KfVJQQoT5jkXeiWSBK7i4/TLKBNLV0S1wOt8gy4E2TY722KLtdmv2xc6+Wevg==
-
 "@types/structured-source@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/structured-source/-/structured-source-3.0.0.tgz#e95d76037d400c1957f3b709f023b308e92f3829"
@@ -2167,10 +2162,10 @@ markdown-escapes@^1.0.0:
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
   integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
 
-markdown-it-anchor@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/markdown-it-anchor/-/markdown-it-anchor-5.3.0.tgz#d549acd64856a8ecd1bea58365ef385effbac744"
-  integrity sha512-/V1MnLL/rgJ3jkMWo84UR+K+jF1cxNG1a+KwqeXqTIJ+jtA8aWSHuigx8lTzauiIjBDbwF3NcWQMotd0Dm39jA==
+markdown-it-anchor@^8.1.2:
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-anchor/-/markdown-it-anchor-8.4.1.tgz#29e560593f5edb80b25fdab8b23f93ef8a91b31e"
+  integrity sha512-sLODeRetZ/61KkKLJElaU3NuU2z7MhXf12Ml1WJMSdwpngeofneCRF+JBbat8HiSqhniOMuTemXMrsI7hA6XyA==
 
 markdown-it-container@^2.0.0:
   version "2.0.0"
@@ -2659,7 +2654,7 @@ prh@^5.4.4:
     diff "^4.0.1"
     js-yaml "^3.9.1"
 
-prismjs@^1.24.1:
+prismjs@^1.25.0:
   version "1.25.0"
   resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.25.0.tgz#6f822df1bdad965734b310b315a23315cf999756"
   integrity sha512-WCjJHl1KEWbnkQom1+SzftbtXMKQoezOCYs5rECqMN+jP+apI7ftoflyqigqzopSO3hMhTEb0mFClA8lkolgEg==
@@ -4096,10 +4091,10 @@ yallist@^4.0.0:
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
-zenn-cli@^0.1.93:
-  version "0.1.93"
-  resolved "https://registry.yarnpkg.com/zenn-cli/-/zenn-cli-0.1.93.tgz#e6358c30fcefd8242f4ffe888ad3e4afcd7d95e6"
-  integrity sha512-CkBd5MdmAe4yYrHQVlQKRig/cCD4k12OZ2oVaBKiE+CSmHZo4FTGcW+q1DZ+GD+iLVsLCvOCBCFdO8C4LLk2pw==
+zenn-cli@^0.1.98:
+  version "0.1.98"
+  resolved "https://registry.yarnpkg.com/zenn-cli/-/zenn-cli-0.1.98.tgz#f99dffd81c0cef05b2ef41074dc88516b71d14be"
+  integrity sha512-XHLtzOTip8qf+nj4WoQqOC+EQ3jC4GmC31YzERxc4bR/5MYTyEj0cCh5b1dbJDPM8f6P3L53k6b+nR+87h5afQ==
   dependencies:
     arg "^5.0.0"
     cheerio "^1.0.0-rc.10"
@@ -4115,24 +4110,23 @@ zenn-cli@^0.1.93:
     node-fetch "^2.6.1"
     open "^8.2.0"
     ws "^7.4.6"
-    zenn-markdown-html "^0.1.93"
+    zenn-markdown-html "^0.1.98"
 
-zenn-markdown-html@^0.1.93:
-  version "0.1.93"
-  resolved "https://registry.yarnpkg.com/zenn-markdown-html/-/zenn-markdown-html-0.1.93.tgz#ce50da94e4a60c563da8a1962a307abc7e430b82"
-  integrity sha512-wf6RlwVPjS3Ue5pp8V0mGm9vt0xDNANVxSLLD88ycesFV5svyPwGW+vfZXp9/E6p5qVH2RHemfYGgUk3Y2F55Q==
+zenn-markdown-html@^0.1.98:
+  version "0.1.98"
+  resolved "https://registry.yarnpkg.com/zenn-markdown-html/-/zenn-markdown-html-0.1.98.tgz#b8c1ec65e48d825b02f4cc35a117ee651f8c84c2"
+  integrity sha512-h4pzd97ZJIvGteyaPhneR90NOThrUszwXsIw/q4ZvJDKsBhLJj9SzG52vxW+MDh15Uk7Pxyh31wuyVPbCgwbEQ==
   dependencies:
     "@steelydylan/markdown-it-imsize" "^1.0.2"
     "@steelydylan/prism-diff-highlight" "1.0.4"
-    "@types/prismjs" "^1.16.1"
     markdown-it "^11.0.0"
-    markdown-it-anchor "^5.3.0"
+    markdown-it-anchor "^8.1.2"
     markdown-it-container "^2.0.0"
     markdown-it-footnote "^3.0.2"
     markdown-it-inline-comments "^1.0.1"
     markdown-it-link-attributes "^3.0.0"
     markdown-it-task-lists "^2.1.1"
-    prismjs "^1.24.1"
+    prismjs "^1.25.0"
 
 zlibjs@^0.2.0:
   version "0.2.0"

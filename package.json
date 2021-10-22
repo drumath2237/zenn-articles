@@ -7,11 +7,12 @@
   "license": "MIT",
   "scripts": {
     "preview": "zenn preview",
-    "new": "zenn new:article"
+    "new": "zenn new:article",
+    "lint": "textlint ./articles/*.md"
   },
   "dependencies": {
     "gitmoji-c": "^0.2.1",
-    "zenn-cli": "^0.1.93"
+    "zenn-cli": "^0.1.98"
   },
   "devDependencies": {
     "textlint": "^11.7.6",
