@@ -29,7 +29,6 @@ http リクエストを送れさえすれば簡単に実行できます。
 - 位置合わせという概念について
 - Immersal REST API における位置合わせの考え方
 
-
 逆に本記事で扱わない内容は次の通りです。
 
 - Immersal SDK の使用方法
@@ -42,6 +41,9 @@ http リクエストを送れさえすれば簡単に実行できます。
 その中で、Immersal や VPS のことをもう少し深く知って脱初心者を目指す方に向けて書くつもりです。
 
 # VPSとしてのImmersal
+
+VPS とは Visual Positioning System の略です。
+Virtual Private Server ではないですよ、というのはお約束の注意ですね。
 
 ## VPSとは
 
