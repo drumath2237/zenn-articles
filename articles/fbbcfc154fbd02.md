@@ -108,6 +108,13 @@ REST API によって VPS に必要な機能を一通り実行でいます。
 
 ## Immersal REST APIとは
 
+前述のように、Immersal は VPS の機能を REST API として提供しています。
+これ以降はこの API を Immersal REST API といい、
+特に位置合わせについて説明をしていきます。
+
+Immersal REST API の仕様は[公式ドキュメント](https://immersal.gitbook.io/sdk/cloud-service/rest-api)に記載があるので
+合わせてごらんください。
+
 ## サーバーサイド位置合わせの考えかた
 
 ## Immersalによるサーバーサイド位置合わせの方法
