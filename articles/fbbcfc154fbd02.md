@@ -5,11 +5,12 @@ type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["immersal", "api", "ar"]
 published: false
 ---
+
 # はじめに
 
 ## 概要
 
-この記事は[Iwaken Lab.アドベントカレンダー2021]()の〇日目の記事です。
+この記事は[Iwaken Lab.アドベントカレンダー 2021]()の〇日目の記事です。
 私は Immersal を使った個人開発をすることがあるのですが、
 その時に使っているサーバーサイド位置合わせについて記事を書こうと考えました。
 
@@ -43,10 +44,9 @@ http リクエストを送れさえすれば簡単に実行できます。
 また行列を扱うために線形代数の基礎、
 そしてネットワーク通信に関する基礎知識が必要です。
 
-# VPSとしてのImmersal
+# VPS としての Immersal
 
-
-## VPSとは
+## VPS とは
 
 VPS とは Visual Positioning System の略です。
 Virtual Private Server ではないですよ、というのはお約束の注意ですね。
@@ -83,7 +83,7 @@ AR アプリケーションで取得したカメラ画像などから、
 
 <!-- ここにImmersalの点群マップ -->
 
-## Immersalとは
+## Immersal とは
 
 <!-- Immersalを表わす画像 -->
 
@@ -104,9 +104,9 @@ REST API によって VPS に必要な機能を一通り実行でいます。
 
 <!-- Immersal REST APIを使ったシステム構成図みたいなものをここに -->
 
-# Immersal REST APIによるサーバーサイド位置合わせ
+# Immersal REST API によるサーバーサイド位置合わせ
 
-## Immersal REST APIとは
+## Immersal REST API とは
 
 前述のように、Immersal は VPS の機能を REST API として提供しています。
 これ以降はこの API を Immersal REST API といい、
@@ -117,6 +117,14 @@ Immersal REST API の仕様は[公式ドキュメント](https://immersal.gitboo
 
 ## サーバーサイド位置合わせの考えかた
 
-## Immersalによるサーバーサイド位置合わせの方法
+Immersal の SDK や REST API を参考にしながら、
+位置合わせをするまでの工程を説明していきます。
+ざっくり手順を示すと次のようになり増す。
+
+1. AR シーンのカメラ画像を取得する
+2. 画像からマップにおけるカメラの姿勢を推定する
+3. AR オブジェクトを座標変換する
+
+## Immersal によるサーバーサイド位置合わせの方法
 
 # おわりに
