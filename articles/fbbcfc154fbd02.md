@@ -116,7 +116,7 @@ REST API によって VPS に必要な機能を一通り実行でいます。
 Immersal REST API の仕様は[公式ドキュメント](https://immersal.gitbook.io/sdk/cloud-service/rest-api)に記載があるので
 合わせてごらんください。
 
-## Immersalサーバーサイド位置合わせの手順
+## Immersal サーバーサイド位置合わせの手順
 
 Immersal の SDK や REST API を参考にしながら、
 位置合わせをするまでの工程を説明していきます。
@@ -145,23 +145,23 @@ png 形式の画像データを base64 エンコードした文字列を必要�
 視錘台のモデルがそう定義されるからです。
 
 ![img](https://docs.unity3d.com/ja/2019.4/uploads/Main/ViewFrustum.png)
-*参考：[視錘台を理解する](https://docs.unity3d.com/ja/2019.4/Manual/UnderstandingFrustum.html)*
+_参考：[視錘台を理解する](https://docs.unity3d.com/ja/2019.4/Manual/UnderstandingFrustum.html)_
 
 物理的なカメラのモデルにおいて、
 カメラのレンズの焦点までの距離と、カメラの中心が画像のどこにあるのかを示す光学中心という物理量があり、
 カメラ座標系の 3D 座標から画像へ投影する変換行列は以下のようになります。
 
 ![img](https://i0.wp.com/mem-archive.com/wp-content/uploads/2018/02/%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%891.jpg?resize=768%2C376&ssl=1)
-*参考：[カメラ内部パラメータとは](https://mem-archive.com/2018/02/21/post-157)*
+_参考：[カメラ内部パラメータとは](https://mem-archive.com/2018/02/21/post-157)_
 
 この行列の$f_x, f_y$が焦点距離で$c_x, c_y$が光学中心を示します。
-Unity ARFoundation の[`TryGetIntrinsics`というAPI](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html?q=intrinsics#UnityEngine_XR_ARFoundation_ARCameraManager_TryAcquireLatestCpuImage_UnityEngine_XR_ARSubsystems_XRCpuImage__)などから取得できます。
+Unity ARFoundation の[`TryGetIntrinsics`という API](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html?q=intrinsics#UnityEngine_XR_ARFoundation_ARCameraManager_TryAcquireLatestCpuImage_UnityEngine_XR_ARSubsystems_XRCpuImage__)などから取得できます。
 
 もし画像を取得したあとにカメラが動く場合は、
 この時点でワールド空間における自己位置を保存しておく必要があります。
 つまりモバイル AR などで Immersal を使う場合、カメラの position と rotation の値を保持しておきます。
 
-## REST APIによる自己位置推定
+## REST API による自己位置推定
 
 前述のように Immersal の位置合わせにはカメラ画像とカメラ内部パラメータが必要でした。
 ここで Immersal REST API ドキュメントを覗いてみましょう。
@@ -171,15 +171,15 @@ Unity ARFoundation の[`TryGetIntrinsics`というAPI](https://docs.unity3d.com/
 リクエストに必要な body パラメータは以下の通りです。
 (公式ドキュメントより引用)
 
-|フィールド|型|説明|
-|:---|:--|:--|
-|mapIds|array|An array of {"id": int} objects|
-|b64|string|Base64-encoded PNG image, 8-bit grayscale or 24-bit RGB|
-|oy|number|Camera intrinsics principal point y|
-|ox|number|Camera intrinsics principal point x|
-|fy|number|Camera intrinsics focal length y|
-|fx|number|Camera intrinsics focal length x|
-|token|string|A valid developer token|
+| フィールド | 型     | 説明                                                    |
+| :--------- | :----- | :------------------------------------------------------ |
+| mapIds     | array  | An array of {"id": int} objects                         |
+| b64        | string | Base64-encoded PNG image, 8-bit grayscale or 24-bit RGB |
+| oy         | number | Camera intrinsics principal point y                     |
+| ox         | number | Camera intrinsics principal point x                     |
+| fy         | number | Camera intrinsics focal length y                        |
+| fx         | number | Camera intrinsics focal length x                        |
+| token      | string | A valid developer token                                 |
 
 `mapIds`はマップの id ですね。
 id の配列ではなく`{id:xxxx}`の配列になっているので間違えないようにしましょう。
@@ -189,7 +189,39 @@ Unity ではカメラ画像の Texture2D を png にエンコードし手えら�
 `token`は Immersal の開発者トークンの文字列です。
 
 これらのパラメータを POST して、無事位置合わせが成功すれば
-以下のような body を持ったレスポンスが返ってきます。
+例えば以下のような body を持ったレスポンスが返ってきます。(公式より引用)
 
-## ARオブジェクトの座標変換
+```json
+{
+  "error": "none",
+  "success": true,
+  "map": 7587,
+  "px": -0.5459369421005249,
+  "py": 0.0632220059633255,
+  "pz": 0.36885133385658264,
+  "r00": 0.68967300653457642,
+  "r01": 0.14381979405879974,
+  "r02": -0.709695041179657,
+  "r10": 0.0070222793146967888,
+  "r11": 0.97870355844497681,
+  "r12": 0.20515856146812439,
+  "r20": 0.7240869402885437,
+  "r21": -0.14647600054740906,
+  "r22": 0.67397546768188477
+}
+```
+
+`px,py,pz`はマップ原点から見たカメラの相対位置で、
+`r00`～`r22`は 3×3 回転行列の各要素です。
+
+`success`は位置合わせが成功したかどうかの bool 値で、
+リクエストが通ったからと言ってこの値が必ず true になるわけではありません。
+もし位置合わせが失敗した場合には位置はゼロベクトル、回転行列はゼロ行列が入っています。
+
+`error`はそもそもリクエストの内容が間違っていた時に、その内容が格納されます。
+自分が見たことあるのは、リクエストで送信した b64 の内容が
+png じゃなかったりすると`"error":"image"`といった具合に返ってきます。
+
+## AR オブジェクトの座標変換
+
 # おわりに
