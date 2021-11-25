@@ -159,8 +159,37 @@ Unity ARFoundation の[`TryGetIntrinsics`というAPI](https://docs.unity3d.com/
 
 もし画像を取得したあとにカメラが動く場合は、
 この時点でワールド空間における自己位置を保存しておく必要があります。
+つまりモバイル AR などで Immersal を使う場合、カメラの position と rotation の値を保持しておきます。
 
 ## REST APIによる自己位置推定
+
+前述のように Immersal の位置合わせにはカメラ画像とカメラ内部パラメータが必要でした。
+ここで Immersal REST API ドキュメントを覗いてみましょう。
+
+位置合わせリクエストのエンドポイントは`https://api.immersal.com/lozaclizeb64`で、json に必要データを登録して POST することで
+自己位置情報が返ってきます。
+リクエストに必要な body パラメータは以下の通りです。
+(公式ドキュメントより引用)
+
+|フィールド|型|説明|
+|:---|:--|:--|
+|mapIds|array|An array of {"id": int} objects|
+|b64|string|Base64-encoded PNG image, 8-bit grayscale or 24-bit RGB|
+|oy|number|Camera intrinsics principal point y|
+|ox|number|Camera intrinsics principal point x|
+|fy|number|Camera intrinsics focal length y|
+|fx|number|Camera intrinsics focal length x|
+|token|string|A valid developer token|
+
+`mapIds`はマップの id ですね。
+id の配列ではなく`{id:xxxx}`の配列になっているので間違えないようにしましょう。
+`b64`は png 形式の画像を base64 でエンコードした文字列です。
+Unity ではカメラ画像の Texture2D を png にエンコードし手えられた byte 列を更に base64 にエンコードするという手順で取できますす。
+`oy, ox`はカメラの光学中心で、`fx, fy`は焦点距離です。どちらも pixel 単位の数値型で送信します。
+`token`は Immersal の開発者トークンの文字列です。
+
+これらのパラメータを POST して、無事位置合わせが成功すれば
+以下のような body を持ったレスポンスが返ってきます。
 
 ## ARオブジェクトの座標変換
 # おわりに
