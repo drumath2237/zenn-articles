@@ -116,8 +116,6 @@ REST API によって VPS に必要な機能を一通り実行でいます。
 Immersal REST API の仕様は[公式ドキュメント](https://immersal.gitbook.io/sdk/cloud-service/rest-api)に記載があるので
 合わせてごらんください。
 
-Immersal における位置合わせ
-
 ## Immersalサーバーサイド位置合わせの手順
 
 Immersal の SDK や REST API を参考にしながら、
@@ -135,12 +133,32 @@ Immersal の SDK や REST API を参考にしながら、
 
 カメラ画像はご存知の通りカメラで撮影した画像のことです。
 たとえば Unity ARFoundation によるモバイル AR アプリケーションでは、
-`TryGetLatestCpuImage`という API が使うことで取得できます。
-
+[`TryAquireLatestCpuImage`という API](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/cpu-camera-image.html) が使うことで取得できます。
 詳細は後述しますが、Immersal REST API では最終的に
 png 形式の画像データを base64 エンコードした文字列を必要とします。
 
-ここで、もし画像を取得したあとにカメラが動く場合、
+また、Immersal ではカメラの内部パラメータのうち、
+「焦点距離」と「光学中心」が必要です。
+カメラが透視投影モデルの場合、カメラの姿勢を原点とするカメラ座標系の物体は
+奥行きを以って投影されます。
+これは視野角や焦点距離といった要素から構成される
+視錘台のモデルがそう定義されるからです。
+
+![img](https://docs.unity3d.com/ja/2019.4/uploads/Main/ViewFrustum.png)
+*参考：[視錘台を理解する](https://docs.unity3d.com/ja/2019.4/Manual/UnderstandingFrustum.html)*
+
+物理的なカメラのモデルにおいて、
+カメラのレンズの焦点までの距離と、カメラの中心が画像のどこにあるのかを示す光学中心という物理量があり、
+カメラ座標系の 3D 座標から画像へ投影する変換行列は以下のようになります。
+
+![img](https://i0.wp.com/mem-archive.com/wp-content/uploads/2018/02/%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%891.jpg?resize=768%2C376&ssl=1)
+*参考：[カメラ内部パラメータとは](https://mem-archive.com/2018/02/21/post-157)*
+
+この行列の$f_x, f_y$が焦点距離で$c_x, c_y$が光学中心を示します。
+Unity ARFoundation の[`TryGetIntrinsics`というAPI](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html?q=intrinsics#UnityEngine_XR_ARFoundation_ARCameraManager_TryAcquireLatestCpuImage_UnityEngine_XR_ARSubsystems_XRCpuImage__)などから取得できます。
+
+もし画像を取得したあとにカメラが動く場合は、
+この時点でワールド空間における自己位置を保存しておく必要があります。
 
 ## REST APIによる自己位置推定
 
