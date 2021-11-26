@@ -11,11 +11,11 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "16.x"
       - name: Yarn
         run: yarn install
       - name: textlint-github-pr-review
-        uses: tsuyoshicho/action-textlint@v1
+        uses: tsuyoshicho/action-textlint@v3
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
