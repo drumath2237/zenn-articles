@@ -11,11 +11,11 @@ published: false
 ## TL;DR
 
 - Immersal REST API を使えば Immersal SDK を使うことなく位置合わせの実行が可能
-- カメラ情報の取得と変データ換、http リクエスト、座標変換という工程が必要
+- カメラ情報の取得、http リクエスト、座標変換という工程が必要
 
 ## 概要
 
-この記事は[Iwaken Lab.アドベントカレンダー 2021]()の〇日目の記事です。
+この記事は[Iwaken Lab.アドベントカレンダー 2021](https://qiita.com/advent-calendar/2021/iwakenlab)の 16 日目の記事です。
 私は Immersal を使った個人開発をすることがあるのですが、
 その時に使っているサーバーサイド位置合わせについて記事を書こうと考えました。
 
