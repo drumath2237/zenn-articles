@@ -108,6 +108,8 @@ Immersal SDK を Unity で使うことによってマップとの位置合わせ
 その他にも Immersal はサーバーサイド位置合わせを提供しており、
 REST API によって VPS に必要な機能を一通り実行でいます。
 
+https://www.youtube.com/watch?v=h3XCgbu7PcM
+
 <!-- Immersal REST APIを使ったシステム構成図みたいなものをここに -->
 
 # Immersal REST API によるサーバーサイド位置合わせ
@@ -118,8 +120,7 @@ REST API によって VPS に必要な機能を一通り実行でいます。
 これ以降はこの API を Immersal REST API といい、
 特に位置合わせについて説明をしていきます。
 
-Immersal REST API の仕様は[公式ドキュメント](https://immersal.gitbook.io/sdk/cloud-service/rest-api)に記載があるので
-合わせてごらんください。
+Immersal REST API の仕様は[公式ドキュメント](https://immersal.gitbook.io/sdk/cloud-service/rest-api)に記載があるので合わせてご確認ください。
 
 ## Immersal サーバーサイド位置合わせの手順
 
@@ -137,10 +138,8 @@ Immersal の SDK や REST API を参考にしながら、
 「カメラ画像」と「カメラの内部パラメータ」を取得します。
 
 カメラ画像はご存知の通りカメラで撮影した画像のことです。
-たとえば Unity ARFoundation によるモバイル AR アプリケーションでは、
-[`TryAquireLatestCpuImage`という API](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/cpu-camera-image.html) が使うことで取得できます。
-詳細は後述しますが、Immersal REST API では最終的に
-png 形式の画像データを base64 エンコードした文字列を必要とします。
+たとえば Unity ARFoundation では、[`TryAquireLatestCpuImage`という API](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/manual/cpu-camera-image.html) で取得できます。
+詳細は後述しますが、Immersal REST API では最終的に png 形式の画像データを base64 エンコードした文字列を必要とします。
 
 また、Immersal ではカメラの内部パラメータのうち、
 「焦点距離」と「光学中心」が必要です。
@@ -150,14 +149,14 @@ png 形式の画像データを base64 エンコードした文字列を必要�
 視錘台のモデルがそう定義されるからです。
 
 ![img](https://docs.unity3d.com/ja/2019.4/uploads/Main/ViewFrustum.png)
-_参考：[視錘台を理解する](https://docs.unity3d.com/ja/2019.4/Manual/UnderstandingFrustum.html)_
+_引用：[視錘台を理解する](https://docs.unity3d.com/ja/2019.4/Manual/UnderstandingFrustum.html)_
 
 物理的なカメラのモデルにおいて、
 カメラのレンズの焦点までの距離と、カメラの中心が画像のどこにあるのかを示す光学中心という物理量があり、
 カメラ座標系の 3D 座標から画像へ投影する変換行列は以下のようになります。
 
 ![img](https://i0.wp.com/mem-archive.com/wp-content/uploads/2018/02/%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%891.jpg?resize=768%2C376&ssl=1)
-_参考：[カメラ内部パラメータとは](https://mem-archive.com/2018/02/21/post-157)_
+_引用：[カメラ内部パラメータとは](https://mem-archive.com/2018/02/21/post-157)_
 
 この行列の$f_x, f_y$が焦点距離で$c_x, c_y$が光学中心を示します。
 Unity ARFoundation の[`TryGetIntrinsics`という API](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARCameraManager.html?q=intrinsics#UnityEngine_XR_ARFoundation_ARCameraManager_TryAcquireLatestCpuImage_UnityEngine_XR_ARSubsystems_XRCpuImage__)などから取得できます。
@@ -171,8 +170,14 @@ Unity ARFoundation の[`TryGetIntrinsics`という API](https://docs.unity3d.com
 前述のように Immersal の位置合わせにはカメラ画像とカメラ内部パラメータが必要でした。
 ここで Immersal REST API ドキュメントを覗いてみましょう。
 
-位置合わせリクエストのエンドポイントは`https://api.immersal.com/lozaclizeb64`で、json に必要データを登録して POST することで
-自己位置情報が返ってきます。
+位置合わせリクエストのエンドポイントは`https://api.immersal.com/lozaclizeb64`で、json に必要データを登録して POST することで自己位置情報が返ってきます。
+
+:::message alert
+記事を執筆中にImmersal SDK 1.15.0がリリースされ、これに対応するREST APIのエンドポイントも追加されました。
+1.15のREST APIの場合は`https://api.immersal.com/1.15.0/lozaclizeb64`を使用してください。
+詳しくは[ChangeLog](https://immersal.gitbook.io/sdk/about/changelog#sdk-v1.15.0)をご覧ください。
+:::
+
 リクエストに必要な body パラメータは以下の通りです。
 (公式ドキュメントより引用)
 
