@@ -3,7 +3,7 @@ title: "Immersal REST APIを使ったサーバーサイド位置合わせの考�
 emoji: "🌏"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["immersal", "api", "ar"]
-published: false
+published: true
 ---
 
 # はじめに
