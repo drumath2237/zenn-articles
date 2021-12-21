@@ -30,7 +30,26 @@ Babylon.js は WebGL ライブラリの 1 つで TypeScript フレンドリー�
 
 ## 扱う内容と対象読者
 
+本記事で扱う内容は、「Vite 環境の Babylon.js で glb モデルを読み込む」というものです。
+簡単な備忘録なので高度な知識は必要ありませんが、TypeScript の文法や Babylon.js について事前に理解していることが望ましいです。
+
 ## 想定環境
+
+想定する環境は以下の通りです。
+
+- TypeScript
+- Babylon.js 5.0.0-alpha.60
+- Vite
+
+プロジェクトは次のコマンドで作成した構成を基本とします。
+
+```
+yarn create vite <app name> --template vanilla-ts
+```
+
+また本記事の内容をサンプルとして公開していますので、合わせてご確認ください。
+
+https://github.com/drumath2237/vite-babylon-gltf-sandbox
 
 # Vite ＋ Babylon.js で glb を読み込む
 
