@@ -147,6 +147,10 @@ const main = (canvas: HTMLCanvasElement) => {
 main(renderCanvas);
 ```
 
+これで glb モデルをロードできました。
+
+![img](/images/vite-babylon-glb/glb-loaded.png)
+
 # おわりに
 
 Vite 環境で Babylon.js の SceneLoader を使う、簡単な tips について解説しました。
