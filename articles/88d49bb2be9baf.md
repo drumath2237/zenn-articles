@@ -55,8 +55,109 @@ https://github.com/drumath2237/vite-babylon-gltf-sandbox
 
 ## Vite の静的アセット読み込みの仕組み
 
+例えば以下のようなディレクトリ構造があるとします。
+(主要なファイルのみ示しています)
+
+```
+/
+├─ models/
+│  └─ boombox.glb
+├─ src/
+│  ├─ main.ts
+│  └─ style.scss
+├─ index.html
+├─ tsconfig.json
+└─ package.json
+```
+
+`yarn create vite`を使うとこのようなファイルが出来上がります。
+ここで models の中には glb ファイルがあり、これを`main.ts`で静的アセットとして読み込むことを考えます。
+
+Vite はアプリをビルドするときにファイルパスやファイル名を変更するため、
+開発環境で相対パスを決め打ちにするとビルド環境で動かない可能性があります。
+例えば上のプロジェクトで`yarn build`すると、`/index.html`は`/dist/index.html`に、`/models/boombox.glb`は`/dist/assets/boombox.713b197f.glb`になるみたいです。
+詳しくは公式ドキュメントを参照してください。
+
+https://vitejs.dev/guide/assets.html
+
+```ts:main.ts
+import glbModel from '../models/boombox.glb?url';
+```
+
+この`glbModel`は string 型になっており、プロジェクトルートからの相対パスが入っています。ビルド前の状態では`"/models/boombox.glb"`が入っていますが、ビルドされた後は`"/assets/boombox.713b197f.glb"`になります。
+
 ## Babylon.js の SceneLoader で扱えるようにする
+
+Babylon.js は SceneLoader という仕組みで glb ファイルなどの静的アセットを読み込みますが、ちょっと API の仕様が変わっています。
+次のように使用します。
+
+```ts:main.ts
+import * as BABYLON from '@babylonjs/core';
+import '@babylonjs/loaders/glTF';
+
+import glbModel from '../models/boombox.glb?url';
+
+// something ...
+
+BABYLON.SceneLoader.AppendAsync(dirName, fileName, scene)
+  .then(() => {
+    console.log('model loaded');
+  })
+  .catch(console.error);
+```
+
+SceneLoader を使って glb ファイルを読み込むときは、`@babylonjs/loaders`パケージが必要になるので、npm か yarn でインストールしてください。
+そのあと`@babylonjs/loaders/glTF`をインポートするのも忘れないようにしてください。
+
+`SceneLoader.AppendAsync`メソッドは第 1 引数にフォルダのパス、第 2 引数にファイル名を取りますが、ここの仕様が変わっているというか、なぜパス名を一括で指定させてくれないのか......という気持ちになります。
+特に Vite のようなビルド前と後でパスが変わるような場合もっとめんどくさいです。なのでパスを適当にパースするというのが必要になるわけです。本記事の主題ですね。ということでコード例を示します。
+
+```ts:main.ts
+import * as BABYLON from '@babylonjs/core';
+import '@babylonjs/loaders/glTF';
+
+// eslint-disable-next-line import/no-unresolved
+import glbModel from '../models/boombox.glb?url';
+
+import './style.scss';
+
+const renderCanvas = <HTMLCanvasElement>document.getElementById('renderCanvas');
+
+const main = (canvas: HTMLCanvasElement) => {
+  const engine = new BABYLON.Engine(canvas, true);
+  const scene = new BABYLON.Scene(engine);
+
+  // something ...
+
+  // parse url
+  const folderName = glbModel.split('/').slice(0, -1).join('/').concat('/');
+  const fileName = glbModel.split('/').slice(-1)[0];
+
+  BABYLON.SceneLoader.AppendAsync(folderName, fileName, scene)
+    .then(() => {
+      console.log('model loaded');
+    })
+    .catch(console.error);
+
+  engine.runRenderLoop(() => {
+    scene.render();
+  });
+};
+
+main(renderCanvas);
+```
 
 # おわりに
 
+Vite 環境で Babylon.js の SceneLoader を使う、簡単な tips について解説しました。
+多くの人が助かる、みたいな話題ではないのですが、備忘録としてどこかに記録しておきたかったのでアドベントカレンダーの機会に書く機運があって良かったです。
+
+この知見が、皆さんのお役に少しでも立てれば幸いです。
+
 ## 参考文献
+
+https://vitejs.dev/guide/assets.html
+
+https://doc.babylonjs.com/toolsAndResources/assetLibraries/availableMeshes#from-the-playground-scenes-folder
+
+https://doc.babylonjs.com/typedoc/classes/babylon.sceneloader
