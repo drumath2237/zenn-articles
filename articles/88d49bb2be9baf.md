@@ -3,7 +3,7 @@ title: "Vite(vanilla-ts)環境のBabylon.jsで静的なglbをロードするtips
 emoji: "⚡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["babylonjs", "typescript", "vite", "gltf"]
-published: false
+published: true
 ---
 
 # はじめに
@@ -15,6 +15,8 @@ Vite の静的アセットハンドリングの仕組みと相性が悪かった
 url をパースするといった工夫が必要です。
 
 ## 概要
+
+この記事は[Iwaken Lab アドベントカレンダー](https://qiita.com/advent-calendar/2021/iwakenlab)の 22 日目の記事です。
 
 TypeScript は JavaScript の柔軟性を継承しながらも堅牢な型システムを備えているおかげで開発体験の向上が期待でき、昨今の Web 開発において一定の地位を築いています。
 一方で環境構築においては Webpack の設定や Node.js、JavaScript のモジュールシステムなどの知識が必要で、始めるには敷居が高いようにも感じていました。
