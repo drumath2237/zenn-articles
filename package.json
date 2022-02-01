@@ -12,13 +12,13 @@
   },
   "dependencies": {
     "gitmoji-c": "^0.2.1",
-    "zenn-cli": "^0.1.98"
+    "zenn-cli": "^0.1.103"
   },
   "devDependencies": {
-    "textlint": "^11.7.6",
-    "textlint-filter-rule-allowlist": "^2.0.1",
+    "textlint": "^12.1.0",
+    "textlint-filter-rule-allowlist": "^4.0.0",
     "textlint-rule-preset-ja-spacing": "^2.0.2",
-    "textlint-rule-preset-ja-technical-writing": "^4.0.1",
+    "textlint-rule-preset-ja-technical-writing": "^7.0.0",
     "textlint-rule-spellcheck-tech-word": "^5.0.0"
   }
 }
