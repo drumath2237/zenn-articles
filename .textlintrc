@@ -4,7 +4,8 @@
       "allow": [
         "/:::[\\s\\S]*?:::/"
       ]
-    }
+    },
+    "comments": true
   },
   "rules": {
     "preset-ja-spacing": {
