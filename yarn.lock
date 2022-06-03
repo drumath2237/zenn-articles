@@ -138,11 +138,6 @@
   resolved "https://registry.yarnpkg.com/@steelydylan/markdown-it-imsize/-/markdown-it-imsize-1.0.2.tgz#bffec33320601691162e4e903e27eb63d5488b6d"
   integrity sha512-3tfhRLlv8w3GSNzjEx3y1JIyHpCuBhqXN6tILRTR4IhZcrJb6WJJo12jZ/lKiT9VITg9kHHHg6yVsDwO5nnZqw==
 
-"@steelydylan/prism-diff-highlight@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@steelydylan/prism-diff-highlight/-/prism-diff-highlight-1.0.4.tgz#aa9328c472af3e7c63e1830ba9375b128e5f9f58"
-  integrity sha512-1M16pY3PvWVScLrYj9nENZm1yQ+V/w2YoB6NMZkv+/O/nAHoRg6qS1BX8FNnCKSbIk52QIwj+NUi/sUK2EMuew==
-
 "@textlint-rule/textlint-rule-no-invalid-control-character@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@textlint-rule/textlint-rule-no-invalid-control-character/-/textlint-rule-no-invalid-control-character-2.0.0.tgz#1d058af373bc34256097941429d0c04e5eca519a"
@@ -2508,7 +2503,7 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-node-fetch@^2.6.1:
+node-fetch@^2.6.7:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
@@ -2814,7 +2809,7 @@ prh@^5.4.4:
     diff "^4.0.1"
     js-yaml "^3.9.1"
 
-prismjs@^1.26.0:
+prismjs@^1.27.0:
   version "1.28.0"
   resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.28.0.tgz#0d8f561fa0f7cf6ebca901747828b149147044b6"
   integrity sha512-8aaXdYvl1F7iC7Xm1spqSaY/OJBpYW3v+KJ+F17iYxvdc8sfjW194COK5wVhMZX45tGteiBQgdvD/nhxcRwylw==
@@ -4212,10 +4207,10 @@ yallist@^4.0.0:
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
-zenn-cli@^0.1.103:
-  version "0.1.103"
-  resolved "https://registry.yarnpkg.com/zenn-cli/-/zenn-cli-0.1.103.tgz#8f8d808248291cc8d46ae5df91bc9a0b2f377a7c"
-  integrity sha512-ZQAMW8cTUpFFZl+yahRsc1lf1sdW/7w0UGvcNopcqp38j65er28Znzk8nASz0vM9/lsbTFDubuocUmIAY/ai5w==
+zenn-cli@^0.1.110:
+  version "0.1.110"
+  resolved "https://registry.yarnpkg.com/zenn-cli/-/zenn-cli-0.1.110.tgz#e04bd45e09b18e8216bc68f7800ec55e42f174ad"
+  integrity sha512-E8cV4C9SdlgrI9zH1fKBvpGuazfufdbCzJFC1K1mUCqNGJe9LcMeS8pz1E+FpxHob+0N74ToGG5N9lwg+7kW7Q==
   dependencies:
     arg "^5.0.0"
     cheerio "^1.0.0-rc.10"
@@ -4228,18 +4223,17 @@ zenn-cli@^0.1.103:
     history "^5.0.0"
     image-size "^1.0.0"
     js-yaml "^4.1.0"
-    node-fetch "^2.6.1"
+    node-fetch "^2.6.7"
     open "^8.2.0"
     ws "^7.4.6"
-    zenn-markdown-html "^0.1.103"
+    zenn-markdown-html "^0.1.110"
 
-zenn-markdown-html@^0.1.103:
-  version "0.1.103"
-  resolved "https://registry.yarnpkg.com/zenn-markdown-html/-/zenn-markdown-html-0.1.103.tgz#4af06773d58ce8b2a86d5fde21bbd01abc8ecd78"
-  integrity sha512-++PXhdKzTr8QN1jIWMf3r0P+Ycni6piRSaTDV6WJ3S+sAFnW19vfQ9lvbcLBdVX6ETQ7sb1Q0u4rO0lFzjM4pw==
+zenn-markdown-html@^0.1.110:
+  version "0.1.110"
+  resolved "https://registry.yarnpkg.com/zenn-markdown-html/-/zenn-markdown-html-0.1.110.tgz#9455d0485cdbc6f36412ef64cc05d6b61ac5a121"
+  integrity sha512-C0VVqg+chQKZgg2+rduPohVY+8KBoGFwq2szN7AhfWNBXI8Qi6KuxljN+wBXCjTcFpZewPf3k9HlF0NwtDaq0w==
   dependencies:
     "@steelydylan/markdown-it-imsize" "^1.0.2"
-    "@steelydylan/prism-diff-highlight" "1.0.4"
     markdown-it "^12.3.2"
     markdown-it-anchor "^8.4.1"
     markdown-it-container "^2.0.0"
@@ -4247,7 +4241,7 @@ zenn-markdown-html@^0.1.103:
     markdown-it-inline-comments "^1.0.1"
     markdown-it-link-attributes "^3.0.0"
     markdown-it-task-lists "^2.1.1"
-    prismjs "^1.26.0"
+    prismjs "^1.27.0"
 
 zlibjs@^0.3.1:
   version "0.3.1"
