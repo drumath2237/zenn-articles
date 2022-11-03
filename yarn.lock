@@ -3541,9 +3541,9 @@ yallist@^4.0.0:
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
 zenn-cli@^0.1.110:
-  version "0.1.129"
-  resolved "https://registry.yarnpkg.com/zenn-cli/-/zenn-cli-0.1.129.tgz#0a3bcb7b879cfeb2594d081fc6f878d36d94c164"
-  integrity sha512-aXSI/vux4KmkykRCOzKhLMmZXpKriSynSmuR1WNKJLttOSa7C4KfD8C+0KXx1ooGfDTW1l07TEP/e1aULadZnA==
+  version "0.1.131"
+  resolved "https://registry.yarnpkg.com/zenn-cli/-/zenn-cli-0.1.131.tgz#e61fc95158437a2ce6a8a2b4d7185b42dac7faf2"
+  integrity sha512-oikfVMJHSKMFpN3nhhwb8sy0890HJGgC3T4Q5/Av75SWRy8uAUJUSGNDFJL+ysResBFJwXsf/Pg0GHmRMbkUPQ==
 
 zlibjs@^0.3.1:
   version "0.3.1"
