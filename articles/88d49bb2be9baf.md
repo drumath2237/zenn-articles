@@ -4,6 +4,7 @@ emoji: "⚡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["babylonjs", "typescript", "vite", "gltf"]
 published: true
+publication_name: "iwakenlab_book"
 ---
 
 # はじめに
