@@ -4,6 +4,7 @@ emoji: "🌏"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["immersal", "api", "ar"]
 published: true
+publication_name: "iwakenlab_book"
 ---
 
 # はじめに
