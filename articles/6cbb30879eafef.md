@@ -34,7 +34,13 @@ published: false
 
 # Wolvicブラウザについて
 
+タイトルにもあるとおり Wolvic は XR デバイス向けのブラウザです。
+
 ## Firefox Realityの後継ブラウザ
+
+Wolvic という名前を聞いたことなくても、もしかすると Firefox Reality という名前にはピンとくる方もいるのではないでしょうか。Firefox Reality は旧 Oculus Quest2 や HoloLens などのデバイスで使えた xR デバイス向けブラウザでした。
+過去形なところから察せるように、この Firefox Reality というブラウザは既にサポート終了しています。[MoguraVRさんの記事](https://www.moguravr.com/wolvic/)によると、Mozilla のレイオフで Firefox Reality のチームにいた人が対象となったためらしいですね。
+サポートは終了しましたが、Firefox Reality は Igalia という団体に Wolvic という名前で引き継がれました。
 
 ## Lynx-R1に搭載されるらしい
 
@@ -64,5 +70,7 @@ published: false
 # おわりに
 
 ## まとめと感想
+
+<!-- VisionOSのWebXR対応について少し触れる -->
 
 ## 参考
