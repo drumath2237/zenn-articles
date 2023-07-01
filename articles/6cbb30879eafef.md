@@ -42,9 +42,23 @@ Wolvic という名前を聞いたことなくても、もしかすると Firefo
 過去形なところから察せるように、この Firefox Reality というブラウザは既にサポート終了しています。[MoguraVRさんの記事](https://www.moguravr.com/wolvic/)によると、Mozilla のレイオフで Firefox Reality のチームにいた人が対象となったためらしいですね。
 サポートは終了しましたが、Firefox Reality は Igalia という団体に Wolvic という名前で引き継がれました。
 
-## Lynx-R1に搭載されるらしい
+## Lynx R1に搭載されるらしい
+
+自分が Wolvic の情報を追い始めたのは[ikkouさんの記事](https://zenn.dev/ikkou/articles/1fd48b7ad976d3)で Lynx R1 に搭載されることを知ってからでした。
+もともと immersive-web の[WebXRサポートテーブル](https://immersiveweb.dev/#supporttable)にはあったので気になっていたのですが、筆者が注目していたデバイスに標準搭載されるとなったので GitHub のリリースを Watch し始めました。
 
 ## 対応プラットフォーム
+
+2023/07/02 現在で Wolvic の Lates 晩はｖ1.4.0 です。
+次に挙げるデバイス向けの対応がされていると発表されていますが、Lynx などの一部のデバイス向けのバイナリはまだ配布されていません。
+
+- Meta Quest2/Pro
+- Huawei VR Glasses
+- VIVE Focus
+- Pico4 Pico Neo3
+- Lynx R1
+- ThinkReality A3
+- Think Reality VRX
 
 # Wolvic 1.4のリリース
 
