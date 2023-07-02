@@ -127,7 +127,7 @@ https://github.com/Igalia/wolvic/issues/242
 
 Chromium ベース版の開発は進んでおり WebXR 対応までできているとのことですが、まだリリースページに APK などは見当たりませんね。
 
-# A3版Wolvicを使ったデバッグを試してみる
+# A3版Wolvicを使ってWebページをデバッグしてみる
 
 ## A3版でのデバッグ
 
@@ -145,7 +145,7 @@ adb によるワイヤレスデバッグの方法は次のドキュメントを�
 
 https://developer.android.com/studio/command-line/adb?hl=ja#wireless-android11-command-line
 
-## Firefox Nightlyを使ったデバッグ
+## Firefox Nightlyでデバッグする
 
 adb を使って PC と Motorola をリモート接続できていれば、PC の FirefoxNightly を使って A3 で動作している Wolvic ブラウザをインスぺクトできます。
 詳細な手順は Wolvic の GitHub Wiki に記載されています。
@@ -155,13 +155,16 @@ https://github.com/Igalia/wolvic/wiki/Debugging
 まずは Wolvic の設定画面から開発者用の設定を開きリモートデバッグとログを有効化します。
 
 ![img](/images/wolvic1140/dev-op.png)
+_開発者無オプションで設定を有効化_
 
 その次に PC から Firefox Nightly を立ち上げ`about:debugging`という URL を入力して A3 側で起動してる Wolvic を接続します。
 そして Wolvic で立ち上げているタブを選択してインスぺクトすると、いつも通りブラウザで開発者ツールを開いたときのような操作ができます。
 
 ![img](/images/wolvic1140/firefox-dev.png)
+_about:debuggingを開いたところ_
 
 ![img](/images/wolvic1140/devtool.png)
+_FirefoxからWolvicで開いたページをリモートデバッグ_
 
 自分がダウンロードした A3 版の APK だと、なぜかコンソールログが開発者ツールで表示されないようでしたが、デバッガからブレークポイントを設定して変数の値をインスぺクトできました。
 
@@ -260,6 +263,6 @@ Wolvic から dev サーバの URL に接続しますが、A3 から文字を入
 
 ## まとめと感想
 
-<!-- VisionOSのWebXR対応について少し触れる -->
+本記事では、Wolvicの概要と1.4
 
 ## 参考
