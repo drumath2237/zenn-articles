@@ -152,9 +152,109 @@ adb を使って PC と Motorola をリモート接続できていれば、PC �
 
 https://github.com/Igalia/wolvic/wiki/Debugging
 
-まずは Wolvic の設定画面から開発者用の設定を開きリモートデバッグとログの設定をします。
+まずは Wolvic の設定画面から開発者用の設定を開きリモートデバッグとログを有効化します。
+
+![img](/images/wolvic1140/dev-op.png)
+
+その次に PC から Firefox Nightly を立ち上げ`about:debugging`という URL を入力して A3 側で起動してる Wolvic を接続します。
+そして Wolvic で立ち上げているタブを選択してインスぺクトすると、いつも通りブラウザで開発者ツールを開いたときのような操作ができます。
+
+![img](/images/wolvic1140/firefox-dev.png)
+
+![img](/images/wolvic1140/devtool.png)
+
+自分がダウンロードした A3 版の APK だと、なぜかコンソールログが開発者ツールで表示されないようでしたが、デバッガからブレークポイントを設定して変数の値をインスぺクトできました。
 
 ## Babylon.jsのWebVRプロジェクトをデバッグしてみる
+
+最後に簡単にではありますが、自前でホストした WebXR（VR）アプリを Wolvic でデバッグしてみましょう。
+次のコマンドを実行してカレントフォルダに Babylon.js のプロジェクトをセットアップします。
+
+```bash:terminal
+# babylonプロジェクトの作成
+# （筆者作のBabylon.js用スキャッフォールディングツールです）
+npm create babylon-app
+
+# プロジェクトのディレクトリへ移動
+cd <project name>
+
+# 依存パッケージの解決
+npm i
+
+# https対応のために必要
+npm i -D vite-plugin-mkcert
+```
+
+そして`src/index.ts`と`vite.config.ts`を編集します。
+
+::: details index.tsとvite.config.tsのコード
+
+```ts:src/index.ts
+import { Playground } from "./createScene";
+import "./style.css";
+import { Engine } from "@babylonjs/core";
+
+const main = async () => {
+  const renderCanvas = document.getElementById(
+    "renderCanvas"
+  ) as HTMLCanvasElement;
+  if (!renderCanvas) {
+    return;
+  }
+
+  const engine = new Engine(renderCanvas, true);
+
+  const scene = Playground.CreateScene(engine, renderCanvas);
+
+  const { baseExperience } = await scene.createDefaultXRExperienceAsync({
+    optionalFeatures: true,
+    uiOptions: {
+      sessionMode: "immersive-vr",
+    },
+  });
+
+  const featureManager = baseExperience.featuresManager;
+
+  window.addEventListener("resize", () => {
+    engine.resize();
+  });
+
+  engine.runRenderLoop(() => {
+    scene.render();
+  });
+};
+
+main();
+```
+
+```ts:vite.config.ts
+import { defineConfig } from "vite";
+import mkcert from "vite-plugin-mkcert";
+
+export default defineConfig(() => {
+  return {
+    server: {
+      https: true,
+    },
+    plugins: [mkcert()],
+  };
+});
+```
+
+:::
+
+
+そして最後に次のコマンドを実行してローカルに dev サーバをホストします。
+
+```bash
+npm run dev -- --host
+```
+
+Wolvic から dev サーバの URL に接続しますが、A3 から文字を入力するのが非常に困難なので Firefox Reality から入力するのがおすすめです。
+
+ソースマップが設定してあるので開発者ツールで普通に TypeScrpt ファイルからブレークポイントを張れます。デフォルトで有効になっている WebXR Device API のモジュールを調べてみると、コントローラ系のモジュールは扱えるみたいですね。
+
+![img](/images/wolvic1140/baby.png)
 
 # おわりに
 
