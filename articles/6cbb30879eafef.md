@@ -64,14 +64,70 @@ Wolvic という名前を聞いたことなくても、もしかすると Firefo
 
 ## 概要（和訳）
 
+Wolvic 1.4 が 2023/06/17 にリリースされました。
+
+https://github.com/Igalia/wolvic/releases/tag/v1.4
+
+次の文章はリリースページにあった概要欄とその和訳（DeepL 使用）です。
+
+<!-- textlint-disable -->
+
+> This is the last major release of the 1.x series. Some 1.4.x might follow with specific critical bug fixes, but our main focus will switch to 2.0 after this. It's being a while since the previous 1.3.4 release, but we're adding some new cool features, like 3D hand models for hand tracking or passthrough support that took some time to get it right in a variety of devices. Speaking of which, we're adding more devices to the pack, Lenovo VRX & Lenovo A3 (based of Qualcomm's SnapdragonSpaces) and the Lynx-R1.
+
+（和訳）
+
+> これは1.xシリーズの最後のメジャーリリースです。いくつかの1.4.xは特定の重要なバグの修正で続くかもしれませんが、私たちの主な焦点はこの後2.0に切り替わります。前回の1.3.4リリースからしばらく経ちましたが、ハンドトラッキングのための3Dハンドモデルや、様々なデバイスで正しく動作させるのに時間がかかったパススルーのサポートなど、クールな新機能を追加しています。そういえば、Lenovo VRX & Lenovo A3 (QualcommのSnapdragonSpacesベース)とLynx-R1が追加されました。
+
+<!-- textlint-enable -->
+
+今回のリリース内容を見て、個人的には次の２つの項目にワクワクしました。
+
+- 新しいデバイスの対応
+- Chromium 版の WebXR 開発進捗
+
 ## 新デバイスの対応
+
+1.4 のリリースで次の 3 つのデバイスへ新たに対応しました。
+
+- Lenovo VRX
+- Lenovo A3
+- Lynx R1
+
+最近筆者は Lenovo ThinkReality A3 を触っていたり、Lynx R1 のバッカーであったりすることから今回のリリースはとても魅力的に感じました。
+前述のとおり Lynx の標準ブラウザとして搭載されることは発表されていたもののその真偽についてはよくわかっていなかったので、今回のリリースで現実味を帯びてきたんだなと実感しましたね。そして対応が発表されたことにより、そろそろ Lynx が手元に来るのではないかという期待にもつながりました。
+
+余談なのですが、実は Lynx 対応版と A3 対応版に関してはリリースされてからしばらく公開されていました（18 時間くらいでしょうか）。
+筆者は公開されている間に A3 版の APK をダウンロードしていたので手元にあるのですが、2023/07/02 時点ではまだ公開されていませんね。
+公開が取り下げられてしまった理由を issue で聞いてみたところ次のような理由があるみたいでした。
+
+- Legal Checks をしているため
+- ハンドトラッキングの調整が終わったら公開したいため
+
+https://github.com/Igalia/wolvic/issues/745
+
+いったん正式公開を待ちましょう。楽しみですね。
 
 ## Chromium版も開発中
 
-<!-- WebARはこちらに乗るとのことなので取り上げる -->
-<!-- https://github.com/Igalia/wolvic/issues/242 -->
+Wolvic は、おそらくですが Gecko エンジンをベースに開発されていました。Firefox Reality が元になっているのでその流れを組んでいるのではないかと考えます。
+しかし並行して Chromium ベース版も開発されているようで、Igalia のリポジトリの中には[`wolvic-chromium`という Chromium の Fork](https://github.com/Igalia/wolvic-chromium) が存在しています。
+またその Fork では Support WebXR for Wolvic という名前の Pull Request もマージされているようです。
 
-# Wolvicを使ったデバッグを試してみる
+https://github.com/Igalia/wolvic-chromium/pull/10
+
+textlint-disable
+
+筆者が Wolvic の Chromium ベース版に期待を寄せているのは、WebXR Augmented Reality Module、つまり WebAR 対応をされる旨の言及が issue の中でされていたためです。
+
+https://github.com/Igalia/wolvic/issues/242
+
+こちらはメンバーの svillar さんのコメントです。
+
+> I'll reopen this because we are not likely going to have this support using Gecko, but it'll be available with the Chromium backend we are planning for next year
+
+Chromium ベース版の開発は進んでおり WebXR 対応までできているとのことですが、まだリリースページに APK などは見当たりませんね。
+
+# A3版Wolvicを使ったデバッグを試してみる
 
 ## A3版でのデバッグ
 
