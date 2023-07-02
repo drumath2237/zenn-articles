@@ -3,7 +3,7 @@ title: "XR向けWebブラウザWolvic 1.4が個人的にアツい"
 emoji: "🐺"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["webxr", "browser", "vr", "wolvic"]
-published: false
+published: true
 ---
 
 # はじめに
