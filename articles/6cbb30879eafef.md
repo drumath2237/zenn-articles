@@ -31,7 +31,7 @@ Wolvic 1.4 では新デバイスへの対応などのアップデートがあり
 - Windows 10 / 11 Home
 - Firefox Nightly 116.0a1
 - ThinkReality A3
-- Snapdragon Spaces Services 0.1.4
+- Snapdragon Spaces Services 0.14.0
 - Wolvic (for A3) 1.4
 
 # Wolvicブラウザについて
