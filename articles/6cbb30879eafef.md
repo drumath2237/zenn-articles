@@ -10,6 +10,8 @@ published: false
 
 ## TL;DR
 
+Wolvic 1.4 では新デバイスへの対応などのアップデートがあり、アツい。
+
 ## 概要と対象読者
 
 本記事では筆者が個人的に最近お熱な Wolvic ブラウザについて紹介します。
@@ -263,6 +265,14 @@ Wolvic から dev サーバの URL に接続しますが、A3 から文字を入
 
 ## まとめと感想
 
-本記事では、Wolvicの概要と1.4
+本記事では、Wolvic の概要と 1.4 のリリース、デバッグの仕方などをご紹介しました。
+まだ Wolvic や XR デバイスでブラウザを使うこと自体あまりなじみないですが、今後 AR グラスや VRHMD が普及していくに連れて必要になってくるのではないかと考えています。
+
+そういえば Apple Vision Pro に搭載される Safari ブラウザで WebVR がサポートされると公表され少し話題になりましたね。WebXR に慎重派であった Apple もついに......という感じですが、この流れに乗って WebXR を盛り上げていきたいですね。
+
+最後まで読んでいただきありがとうございました。
 
 ## 参考
+
+- [Wolvic 1.4](https://github.com/Igalia/wolvic/releases/tag/v1.4)
+- [wolvic.org](https://wolvic.org/en/)
