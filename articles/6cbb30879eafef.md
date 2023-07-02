@@ -3,7 +3,7 @@ title: "XR向けWebブラウザWolvic 1.4が個人的にアツい"
 emoji: "🐺"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["webxr", "browser", "vr", "wolvic"]
-published: false
+published: true
 ---
 
 # はじめに
@@ -14,12 +14,12 @@ Wolvic 1.4 では新デバイスへの対応などのアップデートがあり
 
 ## 概要と対象読者
 
-本記事では筆者が個人的に最近お熱な Wolvic ブラウザについて紹介します。
-とはいえ Wolvic 自体もまだ開発中のプロダクトなのと、今回取り上げる ThinkReality A3 むけのバイナリがまだ公開されていないなどの状況もありますので現時点でわかる範囲にて共有になっています。
+本記事では筆者が最近お熱な Wolvic ブラウザについて紹介します。
+とはいえ Wolvic 自体もまだ開発中のプロダクトなのと、今回取り上げる ThinkReality A3 むけのバイナリがまだ公開されていないなどの状況もありますので現時点でわかる範囲での共有になっています。
 
-本記事は次のような読者像を想定して執筆しましたが、必ずしも当てはまっていなくても読める内容なはずです。
+本記事は次のような読者像を想定して執筆しましたが、当てはまっていなくても読める内容なはずです。
 
-- xR デバイスやプラットフォームに興味がある
+- XR デバイスやプラットフォームに興味がある
 - Wolvic や Firefox Reality を聞いたことがある・知っている
 - AR グラスや HMD で WebXR を体験・開発したい
 - Web 開発の経験がある
@@ -41,7 +41,7 @@ Wolvic 1.4 では新デバイスへの対応などのアップデートがあり
 ## Firefox Realityの後継ブラウザ
 
 Wolvic という名前を聞いたことなくても、もしかすると Firefox Reality という名前にはピンとくる方もいるのではないでしょうか。Firefox Reality は旧 Oculus Quest2 や HoloLens などのデバイスで使えた xR デバイス向けブラウザでした。
-過去形なところから察せるように、この Firefox Reality というブラウザは既にサポート終了しています。[MoguraVRさんの記事](https://www.moguravr.com/wolvic/)によると、Mozilla のレイオフで Firefox Reality のチームにいた人が対象となったためらしいですね。
+過去形なところから察せるように、このブラウザは既にサポート終了しています。[MoguraVRさんの記事](https://www.moguravr.com/wolvic/)によると、Mozilla のレイオフで Firefox Reality のチームメンバーが対象となったかららしいですね。
 サポートは終了しましたが、Firefox Reality は Igalia という団体に Wolvic という名前で引き継がれました。
 
 ## Lynx R1に搭載されるらしい
@@ -51,7 +51,7 @@ Wolvic という名前を聞いたことなくても、もしかすると Firefo
 
 ## 対応プラットフォーム
 
-2023/07/02 現在で Wolvic の Lates 晩はｖ1.4.0 です。
+2023/07/02 現在で Wolvic の最新バージョンはｖ1.4.0 です。
 次に挙げるデバイス向けの対応がされていると発表されていますが、Lynx などの一部のデバイス向けのバイナリはまだ配布されていません。
 
 - Meta Quest2/Pro
@@ -96,7 +96,7 @@ https://github.com/Igalia/wolvic/releases/tag/v1.4
 - Lynx R1
 
 最近筆者は Lenovo ThinkReality A3 を触っていたり、Lynx R1 のバッカーであったりすることから今回のリリースはとても魅力的に感じました。
-前述のとおり Lynx の標準ブラウザとして搭載されることは発表されていたもののその真偽についてはよくわかっていなかったので、今回のリリースで現実味を帯びてきたんだなと実感しましたね。そして対応が発表されたことにより、そろそろ Lynx が手元に来るのではないかという期待にもつながりました。
+前述のとおり Lynx の標準ブラウザとして搭載されることは発表されていたものの、その真偽についてはよくわかっていなかったので今回のリリースで現実味を帯びてきたんだなと実感しましたね。そして対応が発表されたことにより、そろそろ Lynx が手元に来るのではないかという期待にもつながりました。
 
 余談なのですが、実は Lynx 対応版と A3 対応版に関してはリリースされてからしばらく公開されていました（18 時間くらいでしょうか）。
 筆者は公開されている間に A3 版の APK をダウンロードしていたので手元にあるのですが、2023/07/02 時点ではまだ公開されていませんね。
@@ -111,13 +111,11 @@ https://github.com/Igalia/wolvic/issues/745
 
 ## Chromium版も開発中
 
-Wolvic は、おそらくですが Gecko エンジンをベースに開発されていました。Firefox Reality が元になっているのでその流れを組んでいるのではないかと考えます。
+Wolvic は、おそらくですが Gecko エンジンをベースに開発されていました。Firefox Reality が元になっているのでその流れだと考えています。
 しかし並行して Chromium ベース版も開発されているようで、Igalia のリポジトリの中には[`wolvic-chromium`という Chromium の Fork](https://github.com/Igalia/wolvic-chromium) が存在しています。
 またその Fork では Support WebXR for Wolvic という名前の Pull Request もマージされているようです。
 
 https://github.com/Igalia/wolvic-chromium/pull/10
-
-textlint-disable
 
 筆者が Wolvic の Chromium ベース版に期待を寄せているのは、WebXR Augmented Reality Module、つまり WebAR 対応をされる旨の言及が issue の中でされていたためです。
 
@@ -135,32 +133,32 @@ Chromium ベース版の開発は進んでおり WebXR 対応までできてい�
 
 前述のとおり筆者は現在（2023/07/02 時点）公開されていない ThinkReality A3 対応 APK を持っていますので、手元の A3 で試していました。
 
-ThinkRerality A3（以降 A3 と呼ぶ）のことをご存じでない方も多いはずなので簡単に解説すると、Lenovo が出している AR グラスデバイスです。Motorola というスマートフォンと接続して使うタイプのグラスで、前面についているカメラによるトラッキングで 6DoF で動作します。
-Qualcomm が開発する Snapdragon Spaces という SDK に対応したデバイスであることが特徴です。
+ThinkRerality A3（以降 A3 と呼ぶ）のことをご存じでない方も多いはずなので簡単に解説すると、Lenovo が出している AR グラスデバイスです。Motorola というスマートフォンと接続して使うタイプのグラスで、前面についているカメラを使ったトラッキングにより 6DoF で動作します。
+また、Qualcomm が開発する Snapdragon Spaces という SDK に対応したデバイスであることも A3 の特徴です。
 
 https://spaces.qualcomm.com/devices/lenovo-thinkreality-a3/
 
 ## adbでの（ワイヤレス）接続
 
-Motorola スマホは USB Type-C ポートが 1 つ付いていますが A3 のケーブルと接続してしまうため A3 を使用している最中に adb を接続するためにはワイヤレス接続が必要です。
+Motorola スマホは USB Type-C ポートが 1 つ付いていますが A3 に接続してしまうため  adb を接続するためにはワイヤレス接続が必要です。
 adb によるワイヤレスデバッグの方法は次のドキュメントを参考にしてください。
 
 https://developer.android.com/studio/command-line/adb?hl=ja#wireless-android11-command-line
 
 ## Firefox Nightlyでデバッグする
 
-adb を使って PC と Motorola をリモート接続できていれば、PC の FirefoxNightly を使って A3 で動作している Wolvic ブラウザをインスぺクトできます。
+adb を使って PC と Motorola をリモート接続できていれば、PC の Firefox Nightly を使って A3 で動作している Wolvic ブラウザをインスぺクトできます。
 詳細な手順は Wolvic の GitHub Wiki に記載されています。
 
 https://github.com/Igalia/wolvic/wiki/Debugging
 
-まずは Wolvic の設定画面から開発者用の設定を開きリモートデバッグとログを有効化します。
+まずは Wolvic の設定画面から開発者用の設定を開きリモートデバッグとデバッグログを有効化します。
 
 ![img](/images/wolvic1140/dev-op.png)
 _開発者無オプションで設定を有効化_
 
-その次に PC から Firefox Nightly を立ち上げ`about:debugging`という URL を入力して A3 側で起動してる Wolvic を接続します。
-そして Wolvic で立ち上げているタブを選択してインスぺクトすると、いつも通りブラウザで開発者ツールを開いたときのような操作ができます。
+次に PC から Firefox Nightly を立ち上げ`about:debugging`という URL を入力して A3 側で起動してる Wolvic に接続します。
+そして Wolvic で立ち上げているタブを選択してインスぺクトすると、ブラウザで開発者ツールを開いたときのような操作ができます。
 
 ![img](/images/wolvic1140/firefox-dev.png)
 _about:debuggingを開いたところ_
@@ -168,7 +166,7 @@ _about:debuggingを開いたところ_
 ![img](/images/wolvic1140/devtool.png)
 _FirefoxからWolvicで開いたページをリモートデバッグ_
 
-自分がダウンロードした A3 版の APK だと、なぜかコンソールログが開発者ツールで表示されないようでしたが、デバッガからブレークポイントを設定して変数の値をインスぺクトできました。
+自分がダウンロードした A3 版の APK だと、なぜかコンソールログが開発者ツールで表示されないようでしたが、デバッガ機能は問題なく使えるようでした。
 
 ## Babylon.jsのWebVRプロジェクトをデバッグしてみる
 
@@ -249,7 +247,7 @@ export default defineConfig(() => {
 :::
 
 
-そして最後に次のコマンドを実行してローカルに dev サーバをホストします。
+そして最後に次のコマンドを実行してローカル環境で dev サーバをホストします。
 
 ```bash
 npm run dev -- --host
@@ -263,12 +261,12 @@ Wolvic から dev サーバの URL に接続しますが、A3 から文字を入
 
 # おわりに
 
-## まとめと感想
+## まとめと雑談
 
 本記事では、Wolvic の概要と 1.4 のリリース、デバッグの仕方などをご紹介しました。
-まだ Wolvic や XR デバイスでブラウザを使うこと自体あまりなじみないですが、今後 AR グラスや VRHMD が普及していくに連れて必要になってくるのではないかと考えています。
+まだ Wolvic や XR デバイスでブラウザを使うこと自体あまりなじみないですが、今後 AR グラスや VRHMD が普及していくにつれて需要が高まっていくのではないかと考えています。
 
-そういえば Apple Vision Pro に搭載される Safari ブラウザで WebVR がサポートされると公表され少し話題になりましたね。WebXR に慎重派であった Apple もついに......という感じですが、この流れに乗って WebXR を盛り上げていきたいですね。
+そういえば Apple Vision Pro に搭載される Safari ブラウザで WebVR がサポートされると公表され少し話題になりましたね。WebXR に慎重派であった Apple もついに......という感じですが、この流れに乗って WebXR を盛り上げていきたいところです。
 
 最後まで読んでいただきありがとうございました。
 
