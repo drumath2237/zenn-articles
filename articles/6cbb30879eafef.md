@@ -131,9 +131,28 @@ Chromium ベース版の開発は進んでおり WebXR 対応までできてい�
 
 ## A3版でのデバッグ
 
+前述のとおり筆者は現在（2023/07/02 時点）公開されていない ThinkReality A3 対応 APK を持っていますので、手元の A3 で試していました。
+
+ThinkRerality A3（以降 A3 と呼ぶ）のことをご存じでない方も多いはずなので簡単に解説すると、Lenovo が出している AR グラスデバイスです。Motorola というスマートフォンと接続して使うタイプのグラスで、前面についているカメラによるトラッキングで 6DoF で動作します。
+Qualcomm が開発する Snapdragon Spaces という SDK に対応したデバイスであることが特徴です。
+
+https://spaces.qualcomm.com/devices/lenovo-thinkreality-a3/
+
 ## adbでの（ワイヤレス）接続
 
+Motorola スマホは USB Type-C ポートが 1 つ付いていますが A3 のケーブルと接続してしまうため A3 を使用している最中に adb を接続するためにはワイヤレス接続が必要です。
+adb によるワイヤレスデバッグの方法は次のドキュメントを参考にしてください。
+
+https://developer.android.com/studio/command-line/adb?hl=ja#wireless-android11-command-line
+
 ## Firefox Nightlyを使ったデバッグ
+
+adb を使って PC と Motorola をリモート接続できていれば、PC の FirefoxNightly を使って A3 で動作している Wolvic ブラウザをインスぺクトできます。
+詳細な手順は Wolvic の GitHub Wiki に記載されています。
+
+https://github.com/Igalia/wolvic/wiki/Debugging
+
+まずは Wolvic の設定画面から開発者用の設定を開きリモートデバッグとログの設定をします。
 
 ## Babylon.jsのWebVRプロジェクトをデバッグしてみる
 
