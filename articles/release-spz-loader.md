@@ -58,6 +58,55 @@ https://scaniverse.com/news/spz-gaussian-splat-open-source-file-format
 
 ## spz-loaderでできること
 
+spz-loader は複数の npm パッケージから構成されます。
+とは言っても v0.1.0 では次の 2 つのみです。
+
+- core パッケージ
+- Babylon.js 用パッケージ
+
+### coreパッケージ
+
+パッケージ名は`@spz-loader/core`です。
+core パッケージは SPZ データをデコードし、ピュアな JavaScript Object への変換ロジックを提供します。使用感としてはこんな感じです。
+
+```ts:coreパッケージの使用例
+import { loadSpz } from "@spz-loader/core";
+
+import spzUrl from "../assets/racoonfamily.spz?url";
+
+const spzBuffer = await fetch(spzUrl)
+  .then((res) => res.arrayBuffer())
+  .then((buf) => new Uint8Array(buf));
+
+const splat = await loadSpz(spzBuffer);
+
+console.log(splat.numPoints);
+```
+
+`loadSpz`関数にバッファを渡すと`GaussianCloud`型のオブジェクトが返却される感じです。
+この GaussianCloud オブジェクトの定義次の通りになっており、
+基本的に本家 nianticlabs/spz の定義と似たようなものになっています。
+
+```ts:GaussianCloudの定義
+export type GaussianCloud = {
+  numPoints: number;
+  shDegree: number;
+  antialiased: boolean;
+  positions: Float32Array;
+  scales: Float32Array;
+  rotations: Float32Array;
+  alphas: Float32Array;
+  colors: Float32Array;
+  sh: Float32Array;
+};
+```
+
+  https://github.com/nianticlabs/spz/blob/bf305418722bb0663a3074f3828699df44b8c1d2/src/cc/splat-types.h#L29-L54
+
+### Babylon.js用パッケージ
+
+パッケージ名は`@spz-loader/babylonjs`です。
+
 ## spz-loaderで採用されている技術
 
 ### Niantic/spzのwasmコンパイル
