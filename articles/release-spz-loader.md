@@ -38,7 +38,7 @@ SPZ は Niantic が策定する 3D Gaussian Splatting のファイルフォー�
 
 https://scaniverse.com/news/spz-gaussian-splat-open-source-file-format
 
-ブログにも書いてある通り、GaussianSplatting データが保持するデータについて、次のような工夫をしています。
+ブログにも書いてある通り、GaussianSplatting が保持するデータについて次のような工夫をしています。
 
 - 各データをその性質に基づいて適切な精度に収めている
   - 従来使われていた.ply ではすべて double や float で保持していた
@@ -47,13 +47,11 @@ https://scaniverse.com/news/spz-gaussian-splat-open-source-file-format
 
 もともと、GaussianSplatting に使われてきたファイルフォーマットというのは
 色々なものがありました。
-一番スタンダードなのは原著論文でも使用されていた PLY ファイルですが、
+一番スタンダードなのは原著論文のプロジェクトでも使用されていた PLY ファイルですが、
 他にも Compressed PLY, splat, ksplat などといった独自のフォーマットも存在します。
-そういう状況下では、GaussianSplatting を扱うソフトウェアは複数のフォーマットに対応しなくてはならず、
-スタンダードなデータフォーマットを欲する声も上がっていました。
+そういう状況下で、GaussianSplatting を扱うソフトウェアは複数のフォーマットに対応しなくてはならず、スタンダードなデータフォーマットを欲する声も上がっていました。
 
-そんな中、Niantic は SPZ フォーマットを提案します。
-そして既に SPZ は同社が提供する Scaniverse や Niantic Studio といったプラットフォームで利用可能です。
+そんな中、Niantic は SPZ フォーマットを提案します。そして既に SPZ は同社が提供する Scaniverse や Niantic Studio といったプラットフォームで利用可能です。
 私としては、SPZ の登場により GaussianSplatting データの標準化が進むと嬉しいです。
 
 ## spz-loaderでできること
@@ -66,7 +64,7 @@ spz-loader は複数の npm パッケージから構成されます。
 
 ### coreパッケージ
 
-パッケージ名は`@spz-loader/core`です。
+パッケージ名は[`@spz-loader/core`](https://www.npmjs.com/package/@spz-loader/core)です。
 core パッケージは SPZ データをデコードし、ピュアな JavaScript Object への変換ロジックを提供します。使用感としてはこんな感じです。
 
 ```ts:coreパッケージの使用例
@@ -84,8 +82,7 @@ console.log(splat.numPoints);
 ```
 
 `loadSpz`関数にバッファを渡すと`GaussianCloud`型のオブジェクトが返却される感じです。
-この GaussianCloud オブジェクトの定義次の通りになっており、
-基本的に本家 nianticlabs/spz の定義と似たようなものになっています。
+この GaussianCloud オブジェクトの定義は次の通りになっており、基本的に本家 nianticlabs/spz の定義と似たようなものになっています。
 
 ```ts:GaussianCloudの定義
 export type GaussianCloud = {
@@ -105,7 +102,7 @@ https://github.com/nianticlabs/spz/blob/bf305418722bb0663a3074f3828699df44b8c1d2
 
 ### Babylon.js用パッケージ
 
-パッケージ名は`@spz-loader/babylonjs`です。
+パッケージ名は[`@spz-loader/babylonjs`](https://www.npmjs.com/package/@spz-loader/babylonjs)です。
 このパッケージでは、Web3D レンダリングエンジンである Babylon.js との連携用のロジックを提供します。
 
 もともと Babylon.js には GaussianSplatting をロードして表示する機能があります。
