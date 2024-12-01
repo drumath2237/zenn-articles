@@ -101,21 +101,39 @@ export type GaussianCloud = {
 };
 ```
 
-  https://github.com/nianticlabs/spz/blob/bf305418722bb0663a3074f3828699df44b8c1d2/src/cc/splat-types.h#L29-L54
+https://github.com/nianticlabs/spz/blob/bf305418722bb0663a3074f3828699df44b8c1d2/src/cc/splat-types.h#L29-L54
 
 ### Babylon.js用パッケージ
 
 パッケージ名は`@spz-loader/babylonjs`です。
+このパッケージでは、Web3D レンダリングエンジンである Babylon.js との連携用のロジックを提供します。
 
-## spz-loaderで採用されている技術
+もともと Babylon.js には GaussianSplatting をロードして表示する機能があります。
+つまり core パッケージで提供されているデコーダから GaussianCloud を生成し、
+Babylon.js 用のオブジェクトへ変換できれば Babylon.js でも表示できますね。
 
-### Niantic/spzのwasmコンパイル
+ということで、そこを丸っとやってくれるような API を提供しているのがこのパッケージです。
+ロジックは Babylon.js に依存しているため、別途インストールする必要があるのでご注意ください。
 
-### wasmを含んだnpmライブラリ
+```ts:babylonjsパッケージの使用例
+import { Engine, Scene } from "@babylonjs/core";
+import { createGaussianSplattingFromSpz } from "@spz-loader/babylonjs";
 
-### pnpm-workspaceを用いたモノレポ構成
+// .spz file path/url
+import spzPath from "../assets/hornedlizard.spz?url";
 
-### lerna-liteによるリリースフロー
+const engine = new Engine(renderCanvas);
+const scene = new Scene(engine);
+
+// ...
+
+const spzBuffer = await fetch(spzPath).then((res) => res.arrayBuffer());
+const splat = await createGaussianSplattingFromSpz(spzBuffer, scene);
+```
+
+こんな感じでコードを書くと、次のポストにあるような GaussianSplatting データをロードできます。
+
+https://x.com/ninisan_drumath/status/1862334844325568633
 
 ## おわりに
 
