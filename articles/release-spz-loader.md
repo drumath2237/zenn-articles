@@ -18,7 +18,7 @@ GaussianSplatting のフォーマットの一種である.spz ファイルのた
 
 ### 概要
 
-本記事では、最近筆者がリリースした spz-loader という npm パッケージの概要をご紹介する内容となっています。
+本記事では、最近私がリリースした spz-loader という npm パッケージの概要をご紹介する内容となっています。
 個々の技術に関しての細かい内容については別の記事にて紹介する方針で、
 とりあえずこの記事ではざっくりとしたライブラリの全体像をご紹介できればと考えています。
 
@@ -54,7 +54,7 @@ https://scaniverse.com/news/spz-gaussian-splat-open-source-file-format
 
 そんな中、Niantic は SPZ フォーマットを提案します。
 そして既に SPZ は同社が提供する Scaniverse や Niantic Studio といったプラットフォームで利用可能です。
-筆者としては、SPZ の登場により GaussianSplatting データの標準化が進むと嬉しいです。
+私としては、SPZ の登場により GaussianSplatting データの標準化が進むと嬉しいです。
 
 ## spz-loaderでできること
 
@@ -137,4 +137,18 @@ https://x.com/ninisan_drumath/status/1862334844325568633
 
 ## おわりに
 
-### 参考文献
+SPZ は GaussianSplatting の新しいフォーマットとしてとても良さそうに感じたので、私としては注目していきたいと感じています。
+今回 OSS 公開という形で何かしら普及に貢献できれば幸いです。
+
+また spz-loader は私にとって 4 シリーズ目の npm パッケージリリースとなりますが、その中でも結構良くできたし、面白い技術を使えたプロジェクトでしたので達成感が大きいです。
+まだ実装できていない機能もありますし、v1.0 ではないのでまだまだ開発は続きますが、ひとまずリリースできてよかったなと感じております。
+
+### 参考リンク
+
+https://github.com/drumath2237/spz-loader
+
+https://zenn.dev/drumath2237/scraps/8c3f9bf6012b54
+
+https://scaniverse.com/news/spz-gaussian-splat-open-source-file-format
+
+https://github.com/nianticlabs/spz
