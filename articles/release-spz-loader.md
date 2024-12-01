@@ -3,7 +3,7 @@ title: "3D Gaussian Splattingローダライブラリ\"spz-loader\"をリリー�
 emoji: "🦎"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["gaussiansplatting", "webassembly", "typescript", "pnpm", "monorepo"]
-published: false
+published: true
 ---
 
 :::message
