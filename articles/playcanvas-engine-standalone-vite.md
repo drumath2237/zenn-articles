@@ -39,6 +39,7 @@ PlayCanvas といえば高機能なエディタが特徴的なフレームワー
 - PlayCanvas 2.2.2
 - Node.js 20.9.0
 - pnpm 9.13.2
+- Vite 6.0.1
 
 ### サンプル
 
@@ -47,6 +48,79 @@ PlayCanvas といえば高機能なエディタが特徴的なフレームワー
 https://github.com/drumath2237/playcanvas-standalone-testbed
 
 ## Viteでプロジェクトのセットアップ
+
+今回は、Vite を使って Web フロントアプリを作っていきます。
+次のコマンドを実行して Vite のプロジェクトを作っていきますが、
+Framework は Vanilla、Language は TypeScript を選択してください。
+
+```sh
+pnpm create vite@latest
+```
+
+そして作成したプロジェクトディレクトリへ移動して、依存パッケージを解決します。
+
+```sh
+pnpm i
+```
+
+PlayCanvas を使うために、HTML にいい感じの canvas 要素を配置しましょう。
+
+```html:index.html
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + TS</title>
+</head>
+
+<body>
+  <canvas id="renderCanvas"></canvas>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
+```
+
+```css:src/style.css
+html,
+body,
+#renderCanvas {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: unset;
+  border: none !important;
+  outline: none !important;
+  display: block;
+}
+```
+
+そして、この Canvas 要素を TypeScript コードから取得できるところまでを確認しましょう。
+
+```ts:src/main.ts
+import "./style.css";
+
+const main = () => {
+  const renderCanvas =
+    document.querySelector<HTMLCanvasElement>("#renderCanvas");
+  if (!renderCanvas) {
+    return;
+  }
+
+  console.log("hello");
+};
+
+main();
+```
+
+この状態で dev サーバを起動し、開発者ツールからログが出力されているのを確認できれば大丈夫です。
+
+```sh
+pnpm dev
+```
 
 ## PlayCanvas Engineで3Dシーンを実装
 
