@@ -3,7 +3,7 @@ title: "非エディタ環境でPlayCanvasを使う（Using the Engine Standalon
 emoji: "🥑"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["playcanvas", "vite", "pnpm", "typescript"]
-published: false
+published: true
 ---
 
 :::message
@@ -195,7 +195,7 @@ main();
 
 今回は簡単なサンプルではありますが、Engine 単体で PlayCanvas を扱いました。
 エディタと違い、全部コードで書かなくてはいけないというコストはありますが、
-自分の好きな環境でカスタマイズできるというのは魅力なのかなと感じます。
+開発環境を好きなようにカスタマイズできるというのは魅力なのかなと感じます。
 もしこの知見が、何かのお役に立てると幸いです。
 
 ### 参考文献
