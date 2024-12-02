@@ -2,7 +2,7 @@
 title: "Windowsユーザのためのpnpm Shell Emulator"
 emoji: "🐚"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["pnpm", "powershell", "shell", "terminal"]
+topics: ["pnpm", "powershell", "shell"]
 published: false
 ---
 
@@ -42,10 +42,51 @@ Windows ユーザだからこそ享受できたメリットがあったので筆
 
 ### Shell Emulatorの概要
 
+Shell Emulator については公式ドキュメントに記載がります。
+
+https://pnpm.io/ja/cli/run#shell-emulator
+
+> When true, pnpm will use a JavaScript implementation of a bash-like shell to execute scripts.
+
+ドキュメントによると、このオプションが有効であるとき、pnpm は Bash ライクなシェルの JS 実装を使ってスクリプトを実行すると言います。
+そして次のようなスクリプトは POSIX シェルではない環境でエラーになるとも書かれています。
+
+```json
+"scripts": {
+  "test": "NODE_ENV=test node test.js"
+}
+```
+
+私はこれまでずっと Node.js を使う時に Windows Powershell で実行をしていたのですが、この問題は確かに起きていましたし、cross-env を使ってずっと回避してきました。
+しかし Shell Emulator を使うと解決するというのです。
+
 ### 使い方
+
+使用方法は簡単で、`.npmrc`ファイルに次のように記載します。
+
+```properties:.npmrc
+shell-emulator=true
+```
 
 ### 使いどころ
 
+先に紹介したように、スクリプトの実行で環境変数を設定する時には使えますね。
+そういえば、と思い試してみたところ、`echo hello && echo world`のような`&&`でコマンドを連ねる記法に関しては、Shell Emulator が無効であっても正常に動作しました。前にやったときは動かなかったような記憶がありましたが、勘違いだったようです。
+
+個人的には、pnpm スクリプトから Docker コンテナで処理を実行したいときに、ボリュームをマウントする記法を揃えられるところに魅力を感じました。
+残念ながら Powershell で`pwd`コマンドを実行した時に、UNIX と同じような挙動にならないため、WSL を使うか、もしくはワークアラウンドが必要でした。
+
+https://qiita.com/FrozenVoice/items/da89679c13ad97f3bca7
+
+しかし Shell Emulator を使うと、ワークアラウンドなしでもボリュームマウントができました。直近で取り組んでいた OSS 開発では、WebAssembly のコンパイルを Docker 上で行っていたので、とても便利に感じましたね。
+
 ## おわりに
 
+今回は pnpm の Shell Emulator をご紹介しました。
+設定方法は簡単だけど、とても便利なものだったのでこれからも使っていきたいです。
+
 ### 参考文献
+
+https://pnpm.io/cli/run#shell-emulator
+
+https://www.petermekhaeil.com/til/pnpm-shell-emulator/
