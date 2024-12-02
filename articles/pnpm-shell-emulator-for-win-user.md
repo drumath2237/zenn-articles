@@ -3,7 +3,7 @@ title: "Windowsユーザのためのpnpm Shell Emulator"
 emoji: "🐚"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["pnpm", "powershell", "shell"]
-published: false
+published: true
 ---
 
 :::message
@@ -42,7 +42,7 @@ Windows ユーザだからこそ享受できたメリットがあったので筆
 
 ### Shell Emulatorの概要
 
-Shell Emulator については公式ドキュメントに記載がります。
+Shell Emulator については公式ドキュメントに記載があります。
 
 https://pnpm.io/ja/cli/run#shell-emulator
 
