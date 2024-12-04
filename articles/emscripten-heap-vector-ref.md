@@ -3,7 +3,7 @@ title: "EmscriptenのHEAPを使ってC++/JavaScript間でバッファやvector�
 emoji: "🥧"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["emscripten", "cpp", "javascript", "webassembly", "wasm"]
-published: false
+published: true
 ---
 
 :::message
@@ -19,8 +19,7 @@ published: false
 
 ### 概要
 
-本記事では、Emscripten を使って C++のコードを WebAssembly にコンパイルして使うプロジェクトにおいて、
-バッファのやり取りをする方法を解説します。
+本記事では、Emscripten で C++を WebAssembly にコンパイルして使うプロジェクトにおいて、バッファのやり取りをする方法を解説します。
 JS 側では ArrayBuffer・TypedArray として、C++側では vector として取り扱う前提となっています。
 
 調べてみるといろいろな方法があるみたいですが、今回ご紹介するのは HEAP を使うシンプル方法です。
@@ -86,7 +85,7 @@ export interface VectorUInt8T extends ClassHandle {
 ## JSからC++へTypedArrayを渡す
 
 基本的な方針として、JS から C++の関数を呼び出すときにバッファを渡したい場合、
-HEAP に確保したバッファ領域へバッファを書き込み、そのアドレスを渡す感じになります。
+HEAP に確保したメモリ領域へバッファを書き込み、そのアドレスを渡す感じになります。
 
 たとえば次の例では、`binaryBuffer`という`Uint8Array`を C++の関数へ渡す処理です。
 
@@ -132,11 +131,12 @@ EMSCRIPTEN_BINDINGS(my_module)
 
 - JS/C++間では型付きのビューとしての HEAP を利用する
 - JS では number 型で先頭アドレスを取得できる
-- C++ではアドレスをポインタ型にキャストし、そこから vector を得る
+- C++では int 型のアドレスをポインタ型にキャストし、そこから vector を得る
 
 ## C++のvectorデータをJSからTypedArrayとして参照する
 
 次に C++から渡ってきた vector を JS 側で TypedArray に変換する方法です。
+例として`vector<float>`を返す関数を作ってみました。
 
 ```cpp:C++側のvectorを返す関数（雰囲気で書いてるのでコンパイル通るか自信がない）
 vector<float> create_vec()
@@ -151,9 +151,10 @@ EMSCRIPTEN_BINDINGS(my_module)
 }
 ```
 
-前述のように、vector は TypedArray として扱えない、ClassHandler になっています。
+前述のように、vector は TypedArray として扱えない、ClassHandle になっています。
 ではどうするかというと、先ほどの逆をやればよいのですね。
 つまり vector のポインタを int にキャストして返してやれば、あとはそのアドレスをもとに JS 側で HEAP からバッファを取り出せます。
+そのために C++側で、vector のポインタを int 型で返すためのユーティリティを作ってみました。
 
 ```cpp:C++側でポインタを取得するユーティリティを実装
 int vf32_ptr(vector<float> &v)
