@@ -37,6 +37,51 @@ JS 側では ArrayBuffer・TypedArray として、C++側では vector として�
 
 ## まずはembindする
 
+vector はプリミティブな型ではないため、まずは embind して JS から使えるようにしておきます。
+今回は`uint8_t(char/byte)`型と`float`型の vector を使うと想定しましょう。
+
+```cpp:embindする
+#include <emscripten.h>
+#include <emscripten/bind.h>
+
+// ...
+
+EMSCRIPTEN_BINDINGS(my_module)
+{
+  register_vector<float>("VectorFloat32");
+  register_vector<uint8_t>("VectorUInt8T");
+}
+```
+
+この状態で、`-lembind`、`--emit-tsd`オプションを使って型定義まで出力してみると、こんな感じになります。
+
+```ts:emscriptenから出力された型定義ファイルの一部
+export interface ClassHandle {
+  isAliasOf(other: ClassHandle): boolean;
+  delete(): void;
+  deleteLater(): this;
+  isDeleted(): boolean;
+  clone(): this;
+}
+export interface VectorFloat32 extends ClassHandle {
+  size(): number;
+  get(_0: number): number | undefined;
+  push_back(_0: number): void;
+  resize(_0: number, _1: number): void;
+  set(_0: number, _1: number): boolean;
+}
+
+export interface VectorUInt8T extends ClassHandle {
+  push_back(_0: number): void;
+  resize(_0: number, _1: number): void;
+  size(): number;
+  get(_0: number): number | undefined;
+  set(_0: number, _1: number): boolean;
+}
+```
+
+分かる通り、`VectorFloat32`や`VectorUInt8T`は`ClassHandle`を継承している interface になっており、このままではどうやら TypedArray として使えるわけではないようです。
+
 ## JSからC++へTypedArrayを渡す
 
 ## C++のvectorデータをJSからTypedArrayとして参照する
