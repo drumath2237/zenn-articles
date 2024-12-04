@@ -136,8 +136,57 @@ EMSCRIPTEN_BINDINGS(my_module)
 
 ## C++のvectorデータをJSからTypedArrayとして参照する
 
-## 注意：ALLOW_MEMORY_GROWTHを使っている場合
+次に C++から渡ってきた vector を JS 側で TypedArray に変換する方法です。
+
+```cpp:C++側のvectorを返す関数（雰囲気で書いてるのでコンパイル通るか自信がない）
+vector<float> create_vec()
+{
+  vector<float> v{1, 2, 3};
+  return v;
+}
+
+EMSCRIPTEN_BINDINGS(my_module)
+{
+  emscripten::function("create_vec", &create_vec);
+}
+```
+
+前述のように、vector は TypedArray として扱えない、ClassHandler になっています。
+ではどうするかというと、先ほどの逆をやればよいのですね。
+つまり vector のポインタを int にキャストして返してやれば、あとはそのアドレスをもとに JS 側で HEAP からバッファを取り出せます。
+
+```cpp:C++側でポインタを取得するユーティリティを実装
+int vf32_ptr(vector<float> &v)
+{
+  return (int)(v.data());
+}
+
+EMSCRIPTEN_BINDINGS(my_module)
+{
+  emscripten::function("vf32_ptr", &vf32_ptr, allow_raw_pointers());
+}
+```
+
+このユーティリティを使ってポインタが取得出来れば、あとは HEAP からバッファを取り出すだけです。
+
+```ts
+const floatVector = wasmModule.create_vec();
+const pointer = wasmModule.vf32_ptr(floatVector);
+const size = floatVector.size();
+
+// これでTypedArrayが得られた（コピーではなくビューなので注意）
+const buffer = new Float32Array(wasmModule.HEAPF32.buffer, pointer, size);
+```
 
 ## おわりに
 
+Emscripten で C++/JS 間のバッファのやり取りを取り上げました。
+HEAP を使うことでシンプルにバッファのやり取りができるので、バイナリデータなどを扱う際には活用していきたいです。
+
 ### 参考文献
+
+https://stackoverflow.com/questions/53602955/using-emscripten-how-to-get-c-uint8-t-array-to-js-blob-or-uint8array
+
+https://iwakwak.hatenablog.com/entry/2020/01/03/154742
+
+https://web.dev/articles/emscripting-a-c-library?hl=ja#the_holy_grail_compiling_a_c_library
