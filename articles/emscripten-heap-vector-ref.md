@@ -63,6 +63,7 @@ export interface ClassHandle {
   isDeleted(): boolean;
   clone(): this;
 }
+
 export interface VectorFloat32 extends ClassHandle {
   size(): number;
   get(_0: number): number | undefined;
@@ -83,6 +84,55 @@ export interface VectorUInt8T extends ClassHandle {
 分かる通り、`VectorFloat32`や`VectorUInt8T`は`ClassHandle`を継承している interface になっており、このままではどうやら TypedArray として使えるわけではないようです。
 
 ## JSからC++へTypedArrayを渡す
+
+基本的な方針として、JS から C++の関数を呼び出すときにバッファを渡したい場合、
+HEAP に確保したバッファ領域へバッファを書き込み、そのアドレスを渡す感じになります。
+
+たとえば次の例では、`binaryBuffer`という`Uint8Array`を C++の関数へ渡す処理です。
+
+```ts:TypeScriptからC++へバッファを渡す
+// MainModuleを取得
+const wasmModule = await MainModuleFactory();
+
+// pointerはnumber型
+// バッファのbyteSize分メモリを確保する
+const pointer = wasmModule._malloc(Uint8Array.BYTES_PER_ELEMENT * binaryBuffer.length);
+if (pointer === null) {
+  throw new Error("could'nt allocate memory");
+}
+
+// Uint8Arrayの場合はHEAPU8のビューを使う
+wasmModule.HEAPU8.set(binaryBuffer, pointer / Uint8Array.BYTES_PER_ELEMENT);
+
+// C++の関数にはバッファの先頭アドレスと長さを渡す
+wasModule.someFunc(pointer, binaryBuffer.length);
+
+// ...
+
+wasmModule._free(pointer)
+```
+
+一方で C++側の関数では、ポインタとバッファ長から vector を取得します。
+
+```cpp:C++でポインタを受け取りvectorに変換して利用する
+void someFunc(const int ptr, const int length)
+{
+  auto pointer = (uint8_t *)ptr;
+  auto uint8Vector = vector<uint8_t>(pointer, pointer + length);
+  // ...
+}
+
+EMSCRIPTEN_BINDINGS(my_module)
+{
+  emscripten::function("someFunc", &someFunc, allow_raw_pointers());
+}
+```
+
+やっていることはシンプルです。
+
+- JS/C++間では型付きのビューとしての HEAP を利用する
+- JS では number 型で先頭アドレスを取得できる
+- C++ではアドレスをポインタ型にキャストし、そこから vector を得る
 
 ## C++のvectorデータをJSからTypedArrayとして参照する
 
