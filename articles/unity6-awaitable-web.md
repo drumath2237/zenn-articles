@@ -14,14 +14,18 @@ published: false
 - Web ビルドをターゲットに含む
 - Unity パッケージ
 
+<!-- textlint-disable -->
 という条件の環境で Awaitable が使えると嬉しいかもしれないと考えた。
+<!-- textlint-enable -->
 
 ### 概要
 
+<!-- textlint-disable -->
 本記事は Unity6(2023)から使える新機能である Awaitable について、
 その使いどころを考えてみた内容です。
 趣旨として「こうするべきだ！」というような主張をするような意図はなく、
 それこそお風呂に入ってるとき「Awaitable ってどこで使えるんだろうなぁ」と考えてた時に思いついた内容を書いてみたものです。
+<!-- textlint-enable -->
 
 まだ新しい機能なのと、筆者も使い込んでいるわけではないので、
 もし間違った内容を書いてしまっていたらご指摘いただけると幸いです。
@@ -41,11 +45,9 @@ Awaitable の機能は今後も強化されていく可能性がありますの�
 
 https://github.com/drumath2237/Web-Awaitable-testbed
 
-## Awaitableとは
+## Unity Webビルドにおける課題
 
-## Webビルドにおける非同期処理の課題とその解決
-
-## Awaitableがいい感じかも
+## Awaitableがいい感じかもと思った
 
 ## おわりに
 
