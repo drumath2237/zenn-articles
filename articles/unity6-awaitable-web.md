@@ -73,16 +73,18 @@ Coroutine も Unity で使える非同期処理の仕組みで、UniTask や Tas
 
 ## Awaitableがいい感じかもと思った
 
-さて、従来のUnity 2022まではこのような状況だったものの、Unity6でAwaitableが登場します。
+さて、従来の Unity 2022 まではこのような状況だったものの、Unity6 で Awaitable が登場します。
 
 ### Awaitableとは
 
-Awaitableは新しく追加された非同期処理のためのクラスです。
-いわゆるUniTaskで実現されていたようなプレイヤーループベースの非同期処理をasync/awaitを使って書けるのが特徴です。
-実際、AwaitableはUniTaskを参考に作られているらしく、「UniTaskのサブセット」という位置づけであることがUniTask作者のneueccさんから言及されています。
+Awaitable は新しく追加された非同期処理のためのクラスです。
+いわゆる UniTask で実現されていたようなプレイヤーループベースの非同期処理を async/await を使って書けるのが特徴です。
+実際、Awaitable は UniTask を参考に作られているらしく、「UniTask のサブセット」という位置づけであることが UniTask 作者の neuecc さんから言及されています。
 
-しかし現状は、UniTaskで使えるけどAwaitableでは使えない機能もいくつかあるようで、例えば`UniTask.WhenAll`相当のAPIが無かったり、リークしている非同期処理を確認できるUniTask TrackerのようなものもAwaitableにはありません。
-WhenAllないのは厳しいですね……。
+<!-- textlint-disable -->
+しかし現状は、UniTask で使えるけど Awaitable では使えない機能もいくつかあるようで、例えば`UniTask.WhenAll`相当の API が無かったり、リークしている非同期処理を確認できる UniTask Tracker のようなものも Awaitable にはありません。
+WhenAll ないのは厳しいですね……。
+<!-- textlint-enable -->
 
 ### AwaitableはWebビルドでも使える
 
