@@ -6,6 +6,10 @@ topics: ["unity", "unity6", "csharp", "awaitable", "asyncawait"]
 published: false
 ---
 
+:::message
+この記事は[にー兄さんアドベントカレンダー2024](https://qiita.com/advent-calendar/2024/ninisan-2024)の6日目の記事です。
+:::
+
 ## はじめに
 
 ### TL;DR
