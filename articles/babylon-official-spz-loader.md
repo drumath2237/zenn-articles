@@ -3,7 +3,7 @@ title: "Babylon.js 7.37.2から公式でSPZを読み込めるようになりま�
 emoji: "🦝"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["babylonjs", "spz", "gaussiansplatting"]
-published: false
+published: true
 ---
 
 :::message
@@ -14,13 +14,13 @@ published: false
 
 ### TL;DR
 
-- Babylon.js のローダで spz 形式の GaussianSplatting データを読み込めるようになりました
+- Babylon.js のローダで spz 形式の GaussianSplatting データを読み込めるようになった
 - 標準のアセット読み込み機能でそのまま使える（@babylonjs/loaders/SPLAT が必要）
 
 ### 概要
 
 本記事では、Babylon.js で最近リリースされた SPZ ローダ機能をご紹介します。
-実装の背景や使い方、そして気になってことを自分なりにまとめてみました。
+使い方と気になってことをまとめてみました。
 
 私も個人的に Babylon.js 向けの spz ローダをリリースしたのですが、早くも公式で実装されましたね。
 
@@ -34,11 +34,12 @@ published: false
 
 ## Babylon.js公式のspzローダ
 
-Babylon.js にもともと実装されていた`SPZFileLoader`で SPZ 形式のファイルもサポートされるようになりました。当該プルリクエストは次の通りです。
+Babylon.js にもともと実装されていた`SPLATFileLoader`で SPZ 形式のファイルもサポートされるようになりました。当該プルリクエストは次の通りです。
 
 https://github.com/BabylonJS/Babylon.js/pull/15849
 
-そもそも SPZ とは何かについては、ネットにいくつか記事がありますので説明は割愛します。
+SPZ 自体については、ネットにいくつか記事がありますので説明は割愛します。
+簡単に言うと、最近発表された 3D Gaussian Splatting のデータ形式です。
 
 https://cgworld.jp/flashnews/202411-Niantic-spz.html
 
@@ -61,6 +62,8 @@ pnpm add @babylonjs/loaders
 import "./style.css";
 
 import { Engine, loadAssetContainerAsync, Scene } from "@babylonjs/core";
+
+// GaussianSplattingのローダを有効化
 import "@babylonjs/loaders/SPLAT";
 
 // SPZファイルのパス(公式サンプルデータのracoonfamily)
@@ -107,7 +110,7 @@ https://github.com/nianticlabs/spz/issues/14
 ## おわりに
 
 ついに Babylon.js 公式でも SPZ ファイルローダが実装・公開されました。
-SPZ は GaussianSplatting のファイルフォーマットとして納得感が高いですし、標準フォーマットとしていい感じに普及してくれるといいなぁと考えています。
+SPZ は GaussianSplatting のファイルフォーマットとして納得感が大きいですし、標準フォーマットとしていい感じに普及してくれるといいなぁと考えています。
 
 ### 参考文献
 
