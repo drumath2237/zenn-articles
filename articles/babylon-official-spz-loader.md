@@ -7,7 +7,7 @@ published: false
 ---
 
 :::message
-この記事は[にー兄さんアドベントカレンダー2024](https://qiita.com/advent-calendar/2024/ninisan-2024)の7日目の記事です。
+この記事は[Babylon.jsアドベントカレンダー2024](https://qiita.com/advent-calendar/2024/babylonjs)の22日目の記事です。
 :::
 
 ## はじめに
@@ -28,7 +28,10 @@ published: false
 ### 検証環境
 
 - Windows 11/10 Home
-- Babylon.js 
+- @babylonjs/core 7.40.2
+- @babylonjs/loaders 7.40.2
+- typescript 5.7.2
+- vite 6.0.2
 
 ## Babylon.js公式のspzローダ
 
@@ -40,6 +43,35 @@ https://github.com/BabylonJS/Babylon.js/releases/tag/7.37.2
 https://github.com/BabylonJS/Babylon.js/pull/15849
 
 ## SPZを読み込んでみる
+
+```ts
+import "./style.css";
+
+import { Engine, loadAssetContainerAsync, Scene } from "@babylonjs/core";
+import "@babylonjs/loaders/SPLAT";
+
+import spzUrl from "../assets/racoonfamily.spz?url";
+
+const main = async () => {
+  const renderCanvas =
+    document.querySelector<HTMLCanvasElement>("#renderCanvas");
+  if (!renderCanvas) {
+    return;
+  }
+
+  const engine = new Engine(renderCanvas);
+  const scene = new Scene(engine);
+
+  scene.createDefaultCameraOrLight(true, true, true);
+
+  window.addEventListener("resize", () => engine.resize());
+  engine.runRenderLoop(() => scene.render());
+
+  await loadAssetContainerAsync(spzUrl, scene);
+};
+
+main();
+```
 
 ## 使ってみて気になったところ
 
