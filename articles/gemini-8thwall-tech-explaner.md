@@ -50,7 +50,7 @@ WhatsThis AI を使って AI と対話すると、カメラ画像に映ってい
 
 - 8thwall
 - React / React Router / MaterialUI
-- Gemini API
+- Gemini Developer API（以降 Gemini API）
 
 開発環境の部分で既にふれている通り、WhatsThis AI は 8thwall で開発されています。
 8thwall は Niantic Spatial 社が開発している WebAR アプリケーションを開発するためのフレームワークで、それと一緒にブラウザ上で開発ができる「クラウドエディタ」も提供されています。
@@ -65,8 +65,15 @@ https://zenn.dev/hololab/articles/about-react-in-8thwall-editor
 
 WhatsThis AI の、AI による応答の部分は Gemini API を用いました。他にもいろいろ選択肢はありそうですが、対話型のエージェントを実装するのに後述する Live API が相性が良かったのと、現状アプリに組み込むってなったときに Gemini API がちょうど良さそうだったのが理由です。
 
+
+## Gemini APIについて
+
+ご存じの方も多そうですが、Gemini API は Google によって開発された LLM です。テキストによる入出力だけでなく、画像・音声・動画・ドキュメントファイルなど様々な入力を受け付けられたり、高品質な画像・音声の生成も可能となっていたりしているため、マルチモーダルな LLM であるという特徴があります。
+Gemini の機能には Web アプリやモバイルアプリなどからアクセスできるほか API や SDK が提供されており、開発者が自分のアプリに Gemini の機能を組み込むことも可能です。
+
 https://ai.google.dev/gemini-api/docs?hl=ja
 
+Gemini API の基本機能は特定のエンドポイントに HTTP の POST リクエストを送ると利用可能なのでとてもシンプルですが、
 
 ## LiveAPIによるAIとのリアルタイムな対話
 
