@@ -46,11 +46,53 @@ WhatsThis AI を使って AI と対話すると、カメラ画像に映ってい
 
 ### 利用技術
 
+利用技術とざっくりと列挙すると次のようになります。
+
+- 8thwall
+- React / React Router / MaterialUI
+- Gemini API
+
+開発環境の部分で既にふれている通り、WhatsThis AI は 8thwall で開発されています。
+8thwall は Niantic Spatial 社が開発している WebAR アプリケーションを開発するためのフレームワークで、それと一緒にブラウザ上で開発ができる「クラウドエディタ」も提供されています。
+今回はクラウドエディタ上で TypeScript を使って開発しています。
+
+https://www.8thwall.com/
+
+WhatsThis AI には AR シーン以外にもボタンやテキストなどの UI 要素もあり、それらの実装には React を使用しています。
+現在の Web フロントエンド開発では React のような UI フレームワークを組み込むことは一般的になっていますが、8thwall（特にクラウドエディタ）アプリでは少し特殊というか、工夫が必要になってきます。8thwall エディタプロジェクトで React を使った所感は次の記事に載せています。
+
+https://zenn.dev/hololab/articles/about-react-in-8thwall-editor
+
+WhatsThis AI の、AI による応答の部分は Gemini API を用いました。他にもいろいろ選択肢はありそうですが、対話型のエージェントを実装するのに後述する Live API が相性が良かったのと、現状アプリに組み込むってなったときに Gemini API がちょうど良さそうだったのが理由です。
+
+https://ai.google.dev/gemini-api/docs?hl=ja
+
+
 ## LiveAPIによるAIとのリアルタイムな対話
+
+### Live APIとは
+
+### WhatsThis AIとLive APIの相性
+
+### カメラ画像と音声の送信
+
+### テキストと音声の受信
 
 ## System Instructionのプロンプトエンジニアリング
 
+### System Instructionとは
+
+### System Instructionによる指示と知識共有
+
+### プロンプトエンジニアリングにおける工夫
+
 ## Function Callingを使った空間認識の実行
+
+### FunctionCallingとは
+
+### 空間認識をFunctionCallingで実行したい
+
+### FunctionCallingの処理フロー
 
 ## 空間認識からARアノテーションまで
 
