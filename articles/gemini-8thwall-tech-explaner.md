@@ -1,5 +1,5 @@
 ---
-title: "WebAR × GeminiAPIなデモアプリ\"WhatsThis AI\"の技術詳説"
+title: "WebAR×AIなデモアプリ\"WhatsThis AI\"で利用したGemini APIの技術詳説"
 emoji: "🍉"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["WebAR", "Gemini", "8thwall", "AR", "AI"]
@@ -104,11 +104,80 @@ console.log(answer); // -> 私はGoogleによってトレーニングされた�
 
 ## LiveAPIによるAIとのリアルタイムな対話
 
+WhatsThis AI ではエージェントと音声を介して会話できます。動作しては GeminiAPI へ単発の音声データを送って応答を待つのではなく、常時音声を送信し、AI が応答タイミングを自動的に判断してデータを返してくる形になります。
+これを実現しているのが、Gemini Live API という機能です。
+
 ### Live APIとは
+
+Live API は GeminiAPI の強力な機能の 1 つで、（先述のとおりですが）クライアントと LLM 間で常時接続されている状態を実現できます。
+
+https://ai.google.dev/gemini-api/docs/live
+
+Live API で音声による対話をする場合の処理フローを次の図に示します（ざっくりですが）。
+
+```mermaid
+sequenceDiagram
+    participant Client as クライアント
+    participant Live as Gemini Live API
+    
+    Client->>Live: WebSocket接続確立
+    Client->>Live: セッション設定
+    
+    Note over Client, Live: 常時音声送信とリアルタイム応答
+    
+    Client->>Live: 音声データ送信
+    Client->>Live: 
+    Client->>Live: 
+    
+    Live->>Live: 音声認識・処理
+
+    Live->>Client: タイミングを見計らって返答
+    Live->>Client: 
+    Live->>Client: 
+    
+    Client->>Live: セッション終了
+```
 
 ### WhatsThis AIとLive APIの相性
 
+図を見ると分かるのですが、単発のリクエストではなく連続的に音声のデータチャンクを一方的に投げた後に、よしななタイミングで Gemini からも連続的な音声のデータチャンクが通知されていますね。
+
+このように細切れのフレームで送受信されるのが LiveAPI の特徴であり、AI と一定時間何回かに分けて対話するといった用途にマッチしています。
+そしておそらく応答スピードも速く、所感として比較的短めのレスポンスを返すことが多いように見受けられます。
+
+また、LiveAPI には Intrupt という機能があり、Gemini から細切れの返答データが返ってきている途中で自分が話し始めると、Gemini が「話が途中で遮られた」ことを検知して話すのをやめます。ちょっと人間っぽいですね（人によっては嫌がられそうですが）。
+
+### Live APIで使えるモデル
+
+執筆時点（2025/07）では次のようなモデルが使用可能です。
+
+- `gemini-2.0-flash-live-001`
+  - 一番安定している印象があります
+- `gemini-live-2.5-flash-preview`
+  - 命名規則が変則ですが、これで合ってるっぽいです
+- `gemini-2.5-flash-preview-native-audio-dialog`
+  - thinking 対応モデルもあり
+
 ### カメラ画像と音声の送信
+
+Live API はマルチモーダルなモデルを採用しているため、次の 3 種類のデータを入力できます。
+
+- テキスト
+- 音声
+- ビデオ
+
+このうち音声とビデオは「InlineInput」という、テキストとは区別された形式として扱われますが、結局どちらも WebSocket 経由で送信されるのには変わりありません。sned するときのデータ構造が違う感じですね。
+WhatsThis AI ではテキストは入力しておらず、音声とビデオを送信し続けています。
+
+音声は PCM16 というフォーマットで送信する必要があります。これはいわゆる音声の生データ（.wav の中身）で、波形の情報が 16bit の整数値でそのまま記録されている形式ですね。サンプリングレートは入力の場合 16kHz である必要があります。
+このデータを Base64 エンコードした文字列を、MIME Type（`audio/pcm;rate=16000`）を添えて送信すれば OK です。
+データはよしなな長さのチャンクに区切って送信します。
+
+https://ai.google.dev/gemini-api/docs/live-guide#audio-formats
+
+WhatsThis AI では[Live API Web Console](https://github.com/google-gemini/live-api-web-console)の実装を参考にしています。
+具体的には Web Audio API からマイク入力を取得し、Audio Worklet 内で Float32Array から Int16Array への変換をして、Base64 エンコードするような実装をしています。
+
 
 ### テキストと音声の受信
 
@@ -127,8 +196,6 @@ console.log(answer); // -> 私はGoogleによってトレーニングされた�
 ### 空間認識をFunctionCallingで実行したい
 
 ### FunctionCallingの処理フロー
-
-## 空間認識からARアノテーションまで
 
 ## おわりに
 
