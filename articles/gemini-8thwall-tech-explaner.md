@@ -73,7 +73,34 @@ Gemini の機能には Web アプリやモバイルアプリなどからアク�
 
 https://ai.google.dev/gemini-api/docs?hl=ja
 
-Gemini API の基本機能は特定のエンドポイントに HTTP の POST リクエストを送ると利用可能なのでとてもシンプルですが、
+Gemini API の基本機能は特定のエンドポイントに HTTP の POST リクエストを送ると利用可能なのでとてもシンプルですが、今回使用した常時接続型の Live API については WebSocket で通信することになります。
+また、Google が公式で提供している SDK もありますので、それを使えば難しいことは考えずに使えるでしょう。
+
+ちなみに、WhatsThis AI は 8thwall クラウドエディタ上で開発しているため、外部の npm パッケージをインストールして使うことはできないので、通信部分は自前で実装しています（と言ってもそんな難しいわけではないですが）。
+
+次のコードは、SDK を使わずに Web フロントエンドから GeminiAPI を呼び出す例です。
+
+```ts: Gemini APIを呼び出すTypeScriptのコード例
+const apiKey = "<API KEY>";
+const apiVersion = "v1beta";
+const modelName = "gemini-2.5-flash";
+const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent`;
+const requestBody = {
+  contents: [{ parts: [{ text: "あなたの名前は何ですか？" }] }],
+};
+
+const res = await fetch(url, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-goog-api-key": apiKey,
+  },
+  body: JSON.stringify(requestBody),
+}).then((res) => res.json());
+
+const answer = res?.candidates?.[0]?.content?.parts?.[0]?.text;
+console.log(answer); // -> 私はGoogleによってトレーニングされた、大規模言語モデルです。
+```
 
 ## LiveAPIによるAIとのリアルタイムな対話
 
