@@ -178,8 +178,25 @@ https://ai.google.dev/gemini-api/docs/live-guide#audio-formats
 WhatsThis AI では[Live API Web Console](https://github.com/google-gemini/live-api-web-console)の実装を参考にしています。
 具体的には Web Audio API からマイク入力を取得し、Audio Worklet 内で Float32Array から Int16Array への変換をして、Base64 エンコードするような実装をしています。
 
+一方ビデオの送信ですが、実態は JPEG 画像です。
+つまり、ビデオ（概念）の各フレームを JPEG エンコードしたものをさらに Base64 エンコードして InlineInput として送信します。
+WhatsThis AI の実装では、8thwall のカメラのピクセルデータを取得し、非表示状態の Canvas 要素に描画して JPEG/Base64 エンコードしています。
+
 
 ### テキストと音声の受信
+
+クライアントが受信するデータ（つまり Live API から送信されるデータ）は、テキスト・音声が選択可能です。テキスト/音声の選択は、WebSocket のセッションが確立された後に送信する config の Response Modality に設定します。
+
+```ts: Response Modalityの設定
+const config = { responseModalities: [Modality.TEXT] };
+```
+
+注意すべき点として、（少なくとも執筆時点では）Live API のモデルで Response Modality を複数設定できず、Text or Audio を指定することになります。
+API の型情報的には複数できそうですが、おそらくモデルが対応していないんですね。
+https://ai.google.dev/gemini-api/docs/live-guide#establish-connection
+
+ところが、WhatsThis AI では AI からの返答を音声で再生しつつ文字でも表示する UI が必要でした。
+最初はこの要件を実現するために、「Response Modality は Text にしておいて、受信したあとに Text to Speech を使って音声再生する」という実装をしていました。ちょうど最近、Gemini では TTS 専用のモデルもリリースされていたので試してみたかったのもありますが、さすがにレスポンスが遅く不便でした。
 
 ## System Instructionのプロンプトエンジニアリング
 
