@@ -2,8 +2,8 @@
 title: "WebAR×AIなデモアプリ\"WhatsThis AI\"で利用したGemini APIの技術詳説"
 emoji: "🍉"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["WebAR", "Gemini", "8thwall", "AR", "AI"]
-published: false
+topics: ["WebAR", "Gemini", "AR", "AI"]
+published: true
 publication_name: "hololab"
 ---
 
@@ -40,8 +40,13 @@ WhatsThis AI は、 AI と AR を掛け合わせた音声ガイド LINE ミニ�
 
 WhatsThis AI を使って AI と対話すると、カメラ画像に映っている場所であったり物の使い方であったりを説明してくれるだけでなく、適当な場所に 3D 矢印やテキストを配置することで、より分かりやすくする機能があります。
 たとえば外国で電車に乗ろうとしたときに券売機の使い方が分からなかったとしましょう。そんな時、WhatsThis AI を起動して券売機を映して質問をすると、手続きに必要なボタンの場所を 3D テキストで表示しながら AI が説明してくれる、といったような使い方を想定しています。
+
+次の画像は WhatsThis AI が動作している様子で、ユーザの質問に対して AI が応答している状態です。
+返答は音声で流れるのと同時にテキストでも表示されており、また 3D オブジェクトとして「しっぽ」を示すテキストと矢印が 3D で出ています。この 3D オブジェクトはいろんな角度から見ても、ちゃんとその場所を指し示すようになっています。
+
 <!-- textlint-disable -->
-＜動画か画像など貼りたい＞
+![capture](/images/gemini-whatsthisai/whatsthis.png =400x)
+*WhatsThis AIの動作画面*
 <!-- textlint-enable -->
 
 ### 利用技術
@@ -198,21 +203,175 @@ https://ai.google.dev/gemini-api/docs/live-guide#establish-connection
 ところが、WhatsThis AI では AI からの返答を音声で再生しつつ文字でも表示する UI が必要でした。
 最初はこの要件を実現するために、「Response Modality は Text にしておいて、受信したあとに Text to Speech を使って音声再生する」という実装をしていました。ちょうど最近、Gemini では TTS 専用のモデルもリリースされていたので試してみたかったのもありますが、さすがにレスポンスが遅く不便でした。
 
+そこで改めてドキュメントを見直した結果、Response Modality が Audio だった場合、音声の字幕データを別途テキストとして受け取れることに気づきました。
+これを使えば、Response Modality は Audio しか設定していないが、読み上げている音声のテキストも表示できるわけですね。
+
+https://ai.google.dev/gemini-api/docs/live-guide#audio-transcription
+
 ## System Instructionのプロンプトエンジニアリング
 
 ### System Instructionとは
 
+System Instruction は、Gemini API の機能の 1 つで、AI エージェントに対して基本的な振る舞いや役割を定義するためのプロンプトです。一般的なユーザーとのやり取りが始まる前に、AI に対してどのような存在であるべきか、どのような応答スタイルを取るべきかを設定できます。
+
 ### System Instructionによる指示と知識共有
+
+WhatsThis AI では、System Instruction を使って AI エージェントを「カメラに写る特定のものに関するエキスパートであり、説明に必要と判断した物の位置を 3 次元的に指示できるもの」として定義しています。
+直近の SusHiTech Tokyo や LODGE XR TALK では、LINE フレンズのグッズに関するエキスパートとしての文脈を与えました。
+
+指示だけではなく、System Instruction ではそのグッズに関する知識も共有しています。
+今回対象となっていたのは「コニー」というキャラクターを模した形のルームライトだったのですが、そのライトの形状や機能性について記載しています。
 
 ### プロンプトエンジニアリングにおける工夫
 
+プロんプロエンジニアリングのプラクティスについて、Gemini のドキュメントに記載されていますので参考にしました。
+
+https://ai.google.dev/gemini-api/docs/prompting-strategies
+
+この中から WhatsThis AI の System Instruction では次のような工夫をしています。
+
+- 伝えたい内容をタイトルで区切って渡す
+- 対話の例示をする
+
+伝えたい内容をタイトルで区切るというのは、本記事のような文書を書く際にも用いるテクニックです。実際にこんな感じに区切って指示を与えています。
+
+```txt
+<タスク概要>
+
+内容
+
+<グッズについての情報>
+
+内容
+
+<物体の位置の特定タスクについて>
+
+内容
+
+<会話の例>
+
+内容
+```
+
+また、会話の例示はちゃんとするようにしました。特に今回は対象物にまつわる質問と、物体の位置を求めるタイミング、まったく関係がない質問をされたときの対う方法について例示しました。
+プロンプトエンジニアリングにおいて例示はかなり重要な要素らしく、例示がないプロンプトを Zero-Shot プロンプト、いくつか例示があるものを Few-Shot プロンプトと呼ぶらしいです。
+
 ## Function Callingを使った空間認識の実行
 
-### FunctionCallingとは
+### Function Callingとは
 
-### 空間認識をFunctionCallingで実行したい
+Function Calling は、AI が必要に応じて事前に定義された関数を呼び出すことができる仕組みです。AI が単純にテキストを生成するだけでなく、外部のシステムと連携して具体的なアクションを実行できるようになります。
 
-### FunctionCallingの処理フロー
+例えば「今日の天気を教えて」という質問に対して、AI が天気予報 API を呼び出して最新の情報を取得し、それをもとに回答を生成するといった使い方が可能です。
+ここでキーなのが、天気予報を取得する処理はあくまで開発者が実装していて、AI は天気予報を取得する必要がある、と判断したことをクライアントに伝えるのみになるところです。
+
+Function Calling では、AI が必要になった情報を自動で判断してクライアント側の処理を呼び出すことができます。これにより、AI アプリケーションの可能性が拡がります。
+
+https://ai.google.dev/gemini-api/docs/function-calling?example=weather
+
+最近話題の MCP（Model Context Protocol）と似たようなコンセプトですが、Function Calling は汎用的なプロトコルではなく、あくまでそのアプリケーション専用の関数を自前で定義するまでにとどまります。
+
+### 空間認識をFunction Callingで実行したい
+
+WhatsThis AI では、特定の物の場所を特定するのに Function Calling を使っています。
+
+具体的には、物の名前（例えばルームライトのボタンなど）とカメラ画像をセットで、別の Gemini モデル（`gemini-2.0-flash-001`）に送り、Spatial Understanding（空間認識）を実行しています。
+実際に使っている関数定義はこのようになっています。見てわかる通り、本当に定義だけで、関数の中身は Gemini からは見えていないですね。
+
+```ts: FunctionCallingの定義
+ {
+  name: 'detect_items_points_async',
+  description: '画像に写っているものの場所を特定するタスクを開始するための関数です。この処理は時間がかかるので、この関数では処理が開始したことを確認し、正常に開始されればその状態を返却します',
+  parameters: {
+    type: 'OBJECT',
+    properties: {
+      detectionTarget: {
+        type: 'STRING',
+        description: '位置を検出する対象物の名前。例）しっぽの電源ボタン、耳、目、えんぴつ、看板など',
+      },
+    },
+  },
+  response: {
+    type: 'OBJECT',
+    properties: {
+      isDetectionStarted: {
+        type: 'STRING',
+        description: '処理が開始されたことを示す文字列',
+        format: 'enum',
+        enum: ['started'],
+        nullable: false,
+      },
+    },
+  },
+}
+```
+
+Spatial Understanding は、画像中に映る物体の位置を特定する機能で、指定したオブジェクトのピクセル座標を返してくれます。
+これは Gemini にそういう特定の機能があるのではなく、プロンプトでそのように指示をすると実行してくれる、くらいのものです。
+例えば次のようなプロンプトを用いて実行します（これはかつての GeminiAPI のサンプルに含まれていたものを引用しています）。
+```txt
+Point to the ${objectName} with no more than 10 items. The answer should follow the json format: [{"point": <point>, "label": <label1>}, ...]. The points are in {x:number, y:number} format normalized to 0-1000
+```
+この機能により、AI が「このボタンを押してください」と言うときに、実際にそのボタンの位置に AR アノテーションを表示できます。
+
+### Function Callingの処理フロー
+
+WhatsThis AI における Function Calling を使った空間認識の処理フローを次に示します。
+
+```mermaid
+sequenceDiagram
+    participant AR as 8thwall AR
+    participant Client as クライアント
+    participant Live as Gemini Live API
+    participant Flash as Gemini 2.0 Flash
+
+    Client->>Live: 音声質問 + カメラ画像
+    Live->>Live: 場所の特定が必要と判断
+    Live->>Client: Function Calling リクエスト
+    Note over Live, Client: 物体名とカメラ画像を指定
+    
+    Client->>Flash: Spatial Understanding 実行
+    Note over Client, Flash: 画像 + 物体名を送信
+    
+    Client->>Live: Function Calling レスポンス
+    Note over Client, Live: 処理開始を通知
+    
+    Flash->>Client: 空間認識結果
+    Note over Flash, Client: ピクセル座標を返却
+    
+    Client->>AR: AR アノテーション配置
+    AR->>Client: 3D 矢印・テキスト表示
+    
+    Live->>Client: 音声による説明
+```
+
+処理の流れは次のようになります。
+
+1. **AI が場所の特定が必要だと判断**
+   - ユーザーから送信された音声とカメラ画像を解析
+   - 3D オブジェクトによる空間アノテーションが必要か AI が自動判断
+
+2. **Function Calling のリクエスト**
+   - AI から特定の物体の位置特定を要求
+   - 物体名を引数に情報を含む
+
+3. **空間認識の実行**
+   - 渡された情報をもとに、別の Gemini へのリクエストで Spatial Understanding を実行
+   - 画像中の指定された物体のピクセル座標を取得
+
+4. **処理開始の通知**
+   - 空間認識が開始されたことを Function Calling のレスポンスとして Live API に返す
+   - これにより AI は処理が進んでいることを認識
+
+5. **AR アノテーションの表示**
+   - 裏で空間認識が完了したら、8thwall の機能を使って AR の矢印を表示
+   - ピクセル座標を 3D 座標に変換（hit-test）して AR 空間に配置
+
+この一連の流れにより、AI による音声説明と視覚的な AR 案内が連携した、直感的なユーザー体験を実現しています。
 
 ## おわりに
 
+WhatsThis AI というアプリのプロトタイプを開発するにあたって利用した Gemini API の機能を解説してきました。
+個人的に、ここまでしっかり Gemini API の機能を使うのは初めてだったので手探りだったのですが、このプロジェクトを通して AI エージェントの実装について知見がたまってとてもよかったです。
+
+この知見が、読者の皆様のお役に立てればとても光栄です。最後まで読んでいただきありがとうございました。
