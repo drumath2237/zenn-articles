@@ -224,7 +224,7 @@ WhatsThis AI では、System Instruction を使って AI エージェントを�
 
 ### プロンプトエンジニアリングにおける工夫
 
-プロんプロエンジニアリングのプラクティスについて、Gemini のドキュメントに記載されていますので参考にしました。
+プロンプトエンジニアリングのプラクティスについて、Gemini のドキュメントに記載されていますので参考にしました。
 
 https://ai.google.dev/gemini-api/docs/prompting-strategies
 
