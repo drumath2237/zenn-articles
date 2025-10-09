@@ -45,7 +45,7 @@ SOG v2 というのがどのようなファイルフォーマットなのか、�
 https://github.com/graphdeco-inria/gaussian-splatting
 
 そこで Gaussian Splatting を扱うエンジニアはそれぞれ、より圧縮効率の良いファイルフォーマットを定義したうえで自作のライブラリやビューアへそれを組み込んでいきました。代表的なものでは`.splat`ファイルでしょうか。
-なにぶん Gaussian Splatting は新しい技術ゆえに、画像における PNG や JPEG、3D モデルにおける FBX や glTF といった、スタンダードなファイルフォーマットは定まらないままになっていました。しかしここ 1，2 年くらいでは、Niantic Spatial inc.の主導する`.spz`を始めとして標準的なフォーマットを定義する動きが見られています。SPZ も最近は[面白い動き](https://github.com/KhronosGroup/glTF/pull/2531)がありますが、本記事の趣旨とずれるので割愛します。
+なにぶん Gaussian Splatting は新しい技術ゆえに、画像における PNG や JPEG、3D モデルにおける FBX や glTF といった、スタンダードなファイルフォーマットは定まらないままになっていました。しかしここ 1 年くらいでは、Niantic Spatial inc.の主導する`.spz`を始めとして標準的なフォーマットを定義する動きが見られています。SPZ も最近は[面白い動き](https://github.com/KhronosGroup/glTF/pull/2531)がありますが、本記事の趣旨とずれるので割愛します。
 
 https://scaniverse.com/news/spz-gaussian-splat-open-source-file-format
 
@@ -64,7 +64,7 @@ PlayCanvas の SOGS（Self Organized Gaussians）は ECCV 2024 という学会�
 
 https://fraunhoferhhi.github.io/Self-Organizing-Gaussians/
 
-SOGS は Gaussian Splatting の各パラメータをソートし、クラスタを構成しながら近接する変化量が滑らかになるように 2D グリッド上に配置するという方法をとっています（正確に理解できてない）。そしてそれらを既存のエンコーディング方法によって画像データとして出力することで高効率に圧縮されるというものでした。PlayCanvas のブログのタイトルには、PLY で保存するよりも 20 倍近くファイルサイズが小さくなると書いてありますね（すごい）。
+SOGS は Gaussian Splatting の各パラメータをソートし、クラスタを構成しながら近接する変化量が滑らかになるように 2D グリッド上に配置するという方法をとっています（正確に理解できてない）。そしてそれらを既存のエンコーディング処理をして画像データとして出力することで高効率に圧縮されるというものでした。PlayCanvas のブログのタイトルには、PLY で保存するよりも 20 倍近くファイルサイズが小さくなると書いてありますね（すごい）。
 たしかに画像のエンコードは昔から研究されていますし、ホワイトノイズのような画像よりもある程度滑らかな画像のほうが圧縮率は上がりそうですよね。
 
 SOGS のブログが発表された約 4 か月後、PlayCanvas は、より洗練された圧縮フォーマットとして「SOG」を発表します。SOGS と SOG で名前がほぼ同じなので注意ですが、前者が Self Organized Gaussians なのに対し、後者は**Spatially Ordered Gaussians**の略称です。GitHub の issue なんかでは SOG v2 と表記されることもあり、SOGS と見間違えやすいのでここでは SOG v2 として表記します。
@@ -110,7 +110,7 @@ ImportMeshAsync(sogPath, scene).then(({ meshes }) => {
 });
 ```
 
-実際のコードと動作はサンプルが気になる方は、次のサンプルをご確認いただけます。
+実際のコードと動作が気になる方は、次のサンプルをご確認いただけます。
 
 https://github.com/drumath2237/babylon-sogv2-support-sandbox
 
