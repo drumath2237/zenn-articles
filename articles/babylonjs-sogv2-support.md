@@ -3,7 +3,7 @@ title: "Babylon.js 8.30.4でSOG v2の読み込みがサポートされました�
 emoji: "🥘"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["gaussiansplatting", "babylonjs", "sogs", "sog"]
-published: false
+published: true
 ---
 
 ## はじめに
