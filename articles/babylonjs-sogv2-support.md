@@ -64,14 +64,14 @@ PlayCanvas の SOGS（Self Organized Gaussians）は ECCV 2024 という学会�
 
 https://fraunhoferhhi.github.io/Self-Organizing-Gaussians/
 
-SOGS は Gaussian Splartting の各パラメータをソートし、クラスタを構成しながら近接する変化量が滑らかになるように 2D グリッド上に配置するという方法をとっています（正確に理解できてない）。そしてそれらを既存のエンコーディング方法によって画像データとして出力することで高効率に圧縮されるというものでした。PlayCanvas のブログのタイトルには、PLY で保存するよりも 20 倍近くファイルサイズが小さくなると書いてありますね（すごい）。
+SOGS は Gaussian Splatting の各パラメータをソートし、クラスタを構成しながら近接する変化量が滑らかになるように 2D グリッド上に配置するという方法をとっています（正確に理解できてない）。そしてそれらを既存のエンコーディング方法によって画像データとして出力することで高効率に圧縮されるというものでした。PlayCanvas のブログのタイトルには、PLY で保存するよりも 20 倍近くファイルサイズが小さくなると書いてありますね（すごい）。
 たしかに画像のエンコードは昔から研究されていますし、ホワイトノイズのような画像よりもある程度滑らかな画像のほうが圧縮率は上がりそうですよね。
 
-SOGS のブログが発表された約 4 か月後、PlayCanvas は、より洗練された圧縮フォーマットとして「SOG」を発表します。SOGS と SOG で名前がほぼ同じなので注意ですが、前者が Self Organized Gaussians なのに対し、後者は**Spatialy Ordered Gaussians**の略称です。GitHub の issue なんかでは SOG v2 と表記されることもあり、SOGS と見間違えやすいのでここでは SOG v2 として表記します。
+SOGS のブログが発表された約 4 か月後、PlayCanvas は、より洗練された圧縮フォーマットとして「SOG」を発表します。SOGS と SOG で名前がほぼ同じなので注意ですが、前者が Self Organized Gaussians なのに対し、後者は**Spatially Ordered Gaussians**の略称です。GitHub の issue なんかでは SOG v2 と表記されることもあり、SOGS と見間違えやすいのでここでは SOG v2 として表記します。
 
 https://blog.playcanvas.com/playcanvas-open-sources-sog-format-for-gaussian-splatting/
 
-SOG v2 は SOGS の時と比べて`meta.json`のスキーマが変わったりしていますが、`.sog`という拡張しが定義され、すべてのファイルが 1 つにまとまって扱いやすくなったのは大きいです。というのも、SOGS では各パラメータが焼きこまれた WebP 画像と`meta.json`をそれぞれロードする必要があって、イマイチ扱いづらかったのです。そういう状況を受けて、Spark では[独自に ZIP 圧縮されたフォーマットを定義](https://github.com/sparkjsdev/spark/blob/5eb7dc5a5edb64697741fd1fec34e64c62e90caa/src/SplatLoader.ts#L222)していました。`.sog`ファイルも、実際は WebP 画像と JSON を ZIP 圧縮しただけなので実態は変わりませんが、拡張子がついたことでフォーマットっぽくなりましたね。
+SOG v2 は SOGS の時と比べて`meta.json`のスキーマが変わったりしていますが、`.sog`という拡張子が定義され、すべてのファイルが 1 つにまとまって扱いやすくなったのは大きいです。というのも、SOGS では各パラメータが焼きこまれた WebP 画像と`meta.json`をそれぞれロードする必要があって、イマイチ扱いづらかったのです。そういう状況を受けて、Spark では[独自に ZIP 圧縮されたフォーマットを定義](https://github.com/sparkjsdev/spark/blob/5eb7dc5a5edb64697741fd1fec34e64c62e90caa/src/SplatLoader.ts#L222)していました。`.sog`ファイルも、実際は WebP 画像と JSON を ZIP 圧縮しただけなので実態は変わりませんが、拡張子がついたことでフォーマットっぽくなりましたね。
 
 他の GS フォーマットから`.sog`を出力したい場合は、PlayCanvas が出している splat-transform という CLI を使えば変換できます。便利。
 
