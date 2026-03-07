@@ -32,8 +32,9 @@ https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source
 
 ### 想定読者
 
-本記事の想定読者を次に示します。
+本記事の想定読者を次に示します（OR 演算です）。
 
+- OSS 版 8thwall のコードが公開された経緯やその内容が気になる人
 - 8thwall の OSS 版エンジンを手元でビルドしたいエンジニア
 - Docker や Linux コマンドへの基礎知識があるエンジニア
 
@@ -79,6 +80,9 @@ Engine についての README は[`/packages/engine`](https://github.com/8thwall
 
 http://github.com/8thwall/8thwall/
 
+リポジトリを見てみると、大部分のコードは C++などで書かれていることがわかります。
+全見られたわけではないので正確ではないかもですが、推測するに 8thwall ではコアなロジックは C++によって記述されており、それが Emscripten によって WebAssembly にビルドされて JS バイナリに含まれているのだと考えます。[`/c8`](https://github.com/8thwall/8thwall/tree/main/c8)というディレクトリを見ると機能ごとに C++のコードが入っているのがわかりますね。
+
 OSS 版のエンジンコードは、ビルドできたとしても Distributed Engine Binary と同等のものが出てくるわけではありません。ブログにも書いてある通りなのですが、SLAM の機能が含まれていないんですね。次の説明は[OSSの発表があったブログ](https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source)から引用したものです。
 
 > SLAM has not been open sourced and will only be available in the Distributed Engine Binary. But with the rest of the framework now open, the engine isn't frozen in place. As browser APIs change and web standards evolve, the community can maintain and adapt it without depending on us. 
@@ -91,8 +95,127 @@ DeepL による日本語訳は次の通りです。
 
 個人的には、やはり AR エンジンとしての 8thwall における魅力の 1 つは SLAM だと思っており、理想的にはオープンになることを期待していましたが厳しそうですね。しかしエンジンがオープンになったということだけでもかなり素晴らしい取り組みです。これには様々な難しい制約や社内での合意形成が必要だったと推測しますが、これが成しえたのはひとえに 8thwall チームの執念とコミュニティに対する強い思いがあったからだと考えます。ひとりの OSS エンジニアとして、このような取り組みをしてくれた 8thwall チームへ感謝と、そしてお疲れさまでしたの気持ちを伝えたいです。
 
-
 ## Docker上でエンジンをビルドする
+
+それではエンジンコードをビルドしていきましょう。
+
+### 全体の流れ
+
+色々試してみたところ、Ubuntu ベースで必要な依存関係をインストールした Docker イメージを作ってしまったほうが良さそうでしたので、そうしています。
+自分はいつも Windows の PC を使っていますが、README に書かれているビルドコマンドを実行するとワイルドカードの違いの影響でエラーが出てしまいました。
+なお、このリポジトリではビルドツールに bazel を使っていますが、当方 bazel には全く詳しくなく......。設定ファイルもちゃんと理解できていないので Dockerfile には過不足あるかもしれません。もし気になる部分があればコメントいただけますと嬉しいです。
+
+全体の流れとしては次のようになります。
+
+1. Dockerfile を書いてイメージをビルドする
+2. インタラクティブモードでコンテナを起動し、ビルドコマンドを実行する
+3. 出ロクされたバイナリをマウントした Windows ディレクトリにコピーして取り出す
+
+試すのに気軽なためコンテナをインタラクティブモードで起動していますが、手順が固まっているのであればシェルスクリプトを書いて自動化するのが良いと考えます。そこら辺のアレンジはご自由にお願いします。
+
+### ビルドする
+
+まずはローカルにリポジトリをクローンしまして、ローカルリポジトリのルートディレクトリで作業することを基本とします。
+リポジトリルートに次のような Dockerfile を配置しましょう。
+
+```dockerfile:/Dockerfile
+FROM ubuntu:22.04
+
+RUN apt-get update && \
+    apt-get install -y \
+        curl \
+        git \
+        build-essential \
+        python3 \
+        python3-dev \
+        python3-numpy \
+        unzip \
+        zip \
+        lsb-release \
+        ca-certificates \
+        bash && \
+    ln -sf /bin/bash /bin/sh
+
+# Bazel 7.2.1 を明示インストール
+RUN curl -L -o /usr/local/bin/bazel \
+    https://github.com/bazelbuild/bazel/releases/download/7.2.1/bazel-7.2.1-linux-x86_64 && \
+    chmod +x /usr/local/bin/bazel
+
+RUN useradd -ms /bin/bash builder
+USER builder
+
+WORKDIR /home/builder/workspace
+```
+
+このリポジトリでは bazel を使ってビルドしていますので、Bazel 7.2.1 を使っています。
+最新の Bazel 9 を使うとビルドが失敗していそうな雰囲気がありましたのでバージョンを合わせておくのがおススメです。Bazelisk を使ったほうが良さそうですが、いったんバージョンを直指定しました。
+
+またコンテナを実行するときはルート権限でログインしてしまうと、途中の Python 環境を導入する際に失敗します。どうやら Bazel の Python パッケージ（というのが正しいのかわかりませんが）をインストールするときに非ルートユーザであることが求められるみたいです。
+
+イメージをビルドし、コンテナをインタラクティブモードで実行します。
+このイメージでは`/home/builder/`ディレクトリがユーザディレクトリになっており、8thwall のプロジェクト全体を`~/workspace`にマウントしています。
+
+```sh
+docker build --no-cache -t 8thwall-bazel .
+docker run -it -v ${PWD}:/home/builder/workspace 8thwall-bazel
+```
+
+あとはビルドコマンドを実行しますが、もしホスト OS に Windows を使っていて Git が CRLF を前提に動作している場合、テキストファイルを CRLF->LF 変換しておくことをおすすめします（私はここでハマりました）。
+Ubuntu のシェル上で次を実行します。
+変換対象となるファイル拡張子を列挙しましたが全部は必要なさそうです。一応関係しそうなものは列挙しています（もしかしたら.sh と BUILD だけでいい可能性があります）。
+
+```sh
+git config --global --add safe.directory /home/builder/workspace
+
+# CRLF->LF
+git ls-files -z \
+  '*.sh' '*.js' '*.ts' '*.json' '*.cc' '*.h' '*.bzl' '*.py' '*.c' '*/BUILD' \
+| xargs -0 sed -i 's/\r$//'
+```
+
+次のビルドコマンドを実行すると、bazel によるビルドが実行されます。
+これは SIMD 演算が使われている WebAssembly をビルドするコマンドらしく、実行環境によっては SIMD をサポートしていないかもしれません。そのときは`--config=wasmreleasesimd`オプションを`--config=wasmrelease`にしてください。
+
+```sh
+bazel build \
+  --config=wasmreleasesimd \
+  --repo_env=PYTHON_BIN_PATH=/usr/bin/python3 \
+  --repo_env=PYTHON_LIB_PATH=/usr/lib/python3/dist-packages \
+  //reality/app/xr/js:bundle
+```
+
+ビルドプロセスが実行されていきますが結構時間がかかります。
+お使いのネットワークの速度などにもよりますが弊環境では 20 分以上かかりました。
+途中で Haggingface から TF Lite 用のモデルデータ（なのかな）をバンバンフェッチしていたりしていて、結構通信帯域を食うんですよね。そしてこれらはローカルファイルに展開されるので、ストレージ容量も持っていかれます（docker のディスクファイルが膨れます）。実行する際には余裕をもって 40GB くらいは空けておくことをおすすめします。
+
+さて、ビルドができたら次のディレクトリに成果物が格納されています。
+
+```
+~/.cache/bazel/_bazel_builder/4c3ace931b70317ca8e3417467a6f042/execroot/_main/bazel-out/wasm32-opt-ST-6b2337be98f2/bin/reality/app/xr/js
+```
+
+`ll`コマンドで見るとこんな感じでした。
+
+![img](/images/oss-8thwall-docker/ll.png)
+*ビルドされたJSバイナリ*
+
+また、次のパスには ZIP 化されたバイナリも含まれていました。
+
+```
+~/.cache/bazel/_bazel_builder/4c3ace931b70317ca8e3417467a6f042/execroot/_main/bazel-out/wasm32-opt/bin/reality/app/xr/js
+```
+
+最後に成果物の入ったディレクトリからファイル群をコピーして終了です。
+
+```sh
+# コピー先のファイル名はよしなに
+cp -r . ~/workspace/dist
+```
+
+これでホスト PC のファイルシステムにもバイナリがコピーされましたので、コンテナを終了しましょう。
+
+![img](/images/oss-8thwall-docker/builds.png)
+*コピーされたJSバイナリ群*
 
 ## おわりに
 
