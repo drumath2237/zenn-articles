@@ -50,8 +50,10 @@ https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source
 
 ### これまでの経緯をざっくり
 
+<!-- textlint-disable -->
 2025 年の 11 月末、8thwall から衝撃の発表がありました。いままで 8thwall はブラウザから使えるクラウドエディタや Studio といったツールを使って WebAR アプリを開発できるプラットフォームとして人気を誇っていました。しかし翌年の 2 月で新規プロジェクト作成および編集などができなくなるというものです。
 改めて見ると、このニュースページに日本語版も併記されていますね（ローカライズされてるからじゃないですよね多分）。8thwall にとって日本のコミュニティの存在は大きかったのかもしれませんね。
+<!-- textlint-enable -->
 
 https://www.8thwall.com/blog/post/200208966730/next-chapter
 
@@ -80,8 +82,10 @@ Engine についての README は[`/packages/engine`](https://github.com/8thwall
 
 http://github.com/8thwall/8thwall/
 
+<!-- textlint-disable -->
 リポジトリを見てみると、大部分のコードは C++などで書かれていることがわかります。
 全見られたわけではないので正確ではないかもですが、推測するに 8thwall ではコアなロジックは C++によって記述されており、それが Emscripten によって WebAssembly にビルドされて JS バイナリに含まれているのだと考えます。[`/c8`](https://github.com/8thwall/8thwall/tree/main/c8)というディレクトリを見ると機能ごとに C++のコードが入っているのがわかりますね。
+<!-- textlint-enable -->
 
 OSS 版のエンジンコードは、ビルドできたとしても Distributed Engine Binary と同等のものが出てくるわけではありません。ブログにも書いてある通りなのですが、SLAM の機能が含まれていないんですね。次の説明は[OSSの発表があったブログ](https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source)から引用したものです。
 
@@ -103,7 +107,10 @@ DeepL による日本語訳は次の通りです。
 
 色々試してみたところ、Ubuntu ベースで必要な依存関係をインストールした Docker イメージを作ってしまったほうが良さそうでしたので、そうしています。
 自分はいつも Windows の PC を使っていますが、README に書かれているビルドコマンドを実行するとワイルドカードの違いの影響でエラーが出てしまいました。
+
+<!-- textlint-disable -->
 なお、このリポジトリではビルドツールに bazel を使っていますが、当方 bazel には全く詳しくなく......。設定ファイルもちゃんと理解できていないので Dockerfile には過不足あるかもしれません。もし気になる部分があればコメントいただけますと嬉しいです。
+<!-- textlint-enable -->
 
 全体の流れとしては次のようになります。
 
@@ -174,7 +181,7 @@ git ls-files -z \
 ```
 
 次のビルドコマンドを実行すると、bazel によるビルドが実行されます。
-これは SIMD 演算が使われている WebAssembly をビルドするコマンドらしく、実行環境によっては SIMD をサポートしていないかもしれません。そのときは`--config=wasmreleasesimd`オプションを`--config=wasmrelease`にしてください。
+これは SIMD 演算が使われている WebAssembly をビルドするコマンドらしく、実行環境によっては SIMD をサポートしていない場合があります。そのときは`--config=wasmreleasesimd`オプションを`--config=wasmrelease`にしてください。
 
 ```sh
 bazel build \
