@@ -47,6 +47,31 @@ https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source
 
 ## 8thwallエンジンのコードがOSSになった
 
+### これまでの経緯をざっくり
+
+2025 年の 11 月末、8thwall から衝撃の発表がありました。いままで 8thwall はブラウザから使えるクラウドエディタや Studio といったツールを使って WebAR アプリを開発できるプラットフォームとして人気を誇っていました。しかし翌年の 2 月で新規プロジェクト作成および編集などができなくなるというものです。
+改めて見ると、このニュースページに日本語版も併記されていますね（ローカライズされてるからじゃないですよね多分）。8thwall にとって日本のコミュニティの存在は大きかったのかもしれませんね。
+
+https://www.8thwall.com/blog/post/200208966730/next-chapter
+
+その翌月、どうブログにて「Distributed Engine Binary」と「Open Source Components」を準備中ということが明らかにされました。
+
+https://www.8thwall.com/blog/post/202888018234/8th-wall-update-engine-distribution-and-open-source-plans
+
+2026 年 1 月 22 日に、Buildable Code Export（クラウドプロジェクトのエクスポート）ができるようになったニュースと一緒に、Distributed Engine Binary の公開がアナウンスされました。
+Distributed Engine Binary についてはデザイニウムさんの記事が詳しいのでぜひ見てみてください。
+
+https://www.8thwall.com/blog/post/205481322650/buildable-code-export-now-available
+
+https://note.com/thedesignium/n/n0c7ab8bfeca9
+
+そして今回 2026 年 3 月 3 日、OSS 版のエンジンが発表されました。
+もともと 8thwall は「8thwall.com」というドメインでプラットフォームが運用されてきましたが、OSS 版の公開に合わせて「[8thwall.org](https://8thwall.org/)」というドメインで別のサイトがホスティングされることになりました。
+
+https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source
+
+### 発表されたOSS版エンジンコードについて
+
 ## Docker上でエンジンをビルドする
 
 ## おわりに
