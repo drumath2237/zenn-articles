@@ -1,5 +1,5 @@
 ---
-title: "OSSになった8thwall EngineのコードをDockerコンテナ上でビルドしてJSバイナリを得る"
+title: "OSSになった8thwall Engineのコードについて、およびDockerコンテナ上でビルドしてJSバイナリを得る方法"
 emoji: "📦"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["8thwall", "docker", "bazel", "webar", "webxr"]
@@ -18,7 +18,7 @@ published: false
 
 - 8thwall から OSS 版のエンジンコードが公開された
 - bazel や Python などの環境をととのえた Docker コンテナ上で OSS 版の JS バイナリをビルドできた
-- ビルドするのに時間がかかるのとストレージを結構持っていかれるので注意
+- ビルドするのに時間がかかるのとストレージ容量を結構持っていかれるので注意
 
 ### 概要
 
@@ -71,6 +71,26 @@ https://note.com/thedesignium/n/n0c7ab8bfeca9
 https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source
 
 ### 発表されたOSS版エンジンコードについて
+
+それでは今月発表された OSS 版エンジンコードについてみていきましょう。
+コードは[8thwall/8thwall](https://github.com/8thwall/8thwall)という GitHub リポジトリで公開されています。
+このリポジトリには Engine コードのほか、xrextras というヘルパーや Studio で使われていた ECS、AR 画像マーカーを作るための CLI である image-target-cli も同梱されています。
+Engine についての README は[`/packages/engine`](https://github.com/8thwall/8thwall/tree/main/packages/engine)にあります。
+
+http://github.com/8thwall/8thwall/
+
+OSS 版のエンジンコードは、ビルドできたとしても Distributed Engine Binary と同等のものが出てくるわけではありません。ブログにも書いてある通りなのですが、SLAM の機能が含まれていないんですね。次の説明は[OSSの発表があったブログ](https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source)から引用したものです。
+
+> SLAM has not been open sourced and will only be available in the Distributed Engine Binary. But with the rest of the framework now open, the engine isn't frozen in place. As browser APIs change and web standards evolve, the community can maintain and adapt it without depending on us. 
+
+DeepL による日本語訳は次の通りです。
+
+> SLAMはオープンソース化されておらず、分散エンジンバイナリでのみ利用可能です。しかし、フレームワークの他の部分がオープン化されたことで、エンジンは固定化されていません。ブラウザAPIが変更され、ウェブ標準が進化するにつれ、コミュニティは当社に依存することなく、SLAMの維持と適応を行えます。 
+
+ですので、もし World-Effect などの SLAM を要する機能を使いたい場合は Distributed Engine Binary を使うしかなさそうですね。
+
+個人的には、やはり AR エンジンとしての 8thwall における魅力の 1 つは SLAM だと思っており、理想的にはオープンになることを期待していましたが厳しそうですね。しかしエンジンがオープンになったということだけでもかなり素晴らしい取り組みです。これには様々な難しい制約や社内での合意形成が必要だったと推測しますが、これが成しえたのはひとえに 8thwall チームの執念とコミュニティに対する強い思いがあったからだと考えます。ひとりの OSS エンジニアとして、このような取り組みをしてくれた 8thwall チームへ感謝と、そしてお疲れさまでしたの気持ちを伝えたいです。
+
 
 ## Docker上でエンジンをビルドする
 
