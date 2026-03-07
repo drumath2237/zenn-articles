@@ -219,4 +219,12 @@ cp -r . ~/workspace/dist
 
 ## おわりに
 
+公開された OSS 版 8thwall エンジンについてザックリ概要と、JS バイナリをビルドする方法をご紹介しました。
+8thwall エンジンの公開の流れは個人的にもかなり注目しており、何かに使えないかなぁと思っていました。
+この記事の内容がお役に立てれば嬉しいです。
+
 ### 参考
+
+https://www.8thwall.com/blog/post/208587408737/8th-wall-open-source
+
+https://github.com/8thwall/8thwall/
