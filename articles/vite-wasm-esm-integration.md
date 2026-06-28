@@ -132,7 +132,41 @@ https://zenn.dev/pixiv/articles/c7071eb29927fe#webassembly
 
 ## Viteで使ってみる
 
+それでは、Vite のプロジェクトを作成して WASM モジュールの関数をインポートしてみましょう。
+
 ### RustでWASMビルドする
+
+まずは Cargo で lib プロジェクトを作成し、`wasm32-unknown-unknown`ターゲットでビルドしてみます。
+そういう場合は wasm-bindgen を使う事が多いですが、今回は必要ないので依存関係には加えません。
+
+```sh
+# cargoでプロジェクトを作成（プロジェクト名はご自由に）
+cargo new --lib ./math-wasm
+```
+
+作成されたプロジェクト中の`/src/lib.rs`を次のように書き換えます。
+`export_name`マクロは`no_mangle`でも構いませんし、`f64`を`f32`にしていますが特に意味はありません。
+
+```rs:/src/lib.rs
+#[unsafe(export_name = "add")]
+pub extern "C" fn add(left: f32, right: f32) -> f32 {
+    left + right
+}
+```
+
+また、WASM ビルドのために、`Cargo.toml`に次の設定を追加します。
+
+```toml:/Cargo.toml
+[lib]
+crate-type = ["cdylib", "rlib"]
+```
+
+ここまでできたら、wasm32 をターゲットにビルドしましょう。
+次のコマンドを実行します。
+
+```sh
+cargo build --target wasm32-unknown-unknown
+```
 
 ### Viteのプロジェクトにインポートしてみる
 
