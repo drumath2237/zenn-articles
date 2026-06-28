@@ -1,5 +1,5 @@
 ---
-title: "Vite 8.1の新機能であるWebAssembly ES Module Integrationについて"
+title: "Vite 8.1の新機能、WebAssembly ES Module Integrationについて"
 emoji: "🌈"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["vite", "wasm", "esmodule", "javascript"]
@@ -12,7 +12,6 @@ published: false
 
 - Vite で、`.wasm`ファイルから直接関数をインポートできるようになった
 - TypeScript コンパイラではエラーが出るので、それをケアする必要がある
-- 関数の型情報は提供しないので、うまくやる必要がある
 
 ### 概要
 
