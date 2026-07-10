@@ -168,7 +168,55 @@ crate-type = ["cdylib", "rlib"]
 cargo build --target wasm32-unknown-unknown
 ```
 
+すると`/target/wasm32-unknown-unknown/debug/math_wasm.wasm`に WASM ファイルが出力されます。
+
 ### Viteのプロジェクトにインポートしてみる
+
+WASM ファイルをインポートするための Vite プロジェクトを作ります。
+試すだけであれば UI フレームワークは不要ですので、`vanilla-ts`なプロジェクトを作りましょう。
+執筆時点（2026 年 7 月）では、これで Vite 8.1.4 が使われるようでした。もし 8.1.0 よりも低いバージョンがインストールされたらバージョンを更新してください。
+
+```sh
+pnpm create vite@latest
+```
+
+Scaffolding されたプロジェクトファイルをいったん整理したうえで、先ほど Rust コードからビルドした WASM ファイルを`/wasm/math_wasm.wasm`に配置しました。
+
+```
+/
+├─ src/
+│    └─ main.ts
+├─ wasm/
+│    └─ math_wasm.wasm
+├─ index.html
+├─ tsconfig.json
+└─ package.json
+```
+
+続いて`/src/main.ts`を次のように編集してみます。
+
+```ts:main.ts
+import { add } from "../wasm/math_wasm.wasm";
+
+function main() {
+  const app = document.getElementById("app");
+  if (!(app instanceof HTMLDivElement)) {
+    return;
+  }
+
+  const result = add(1, 2);
+  console.log(result);
+
+  app.textContent = `add(1, 2) = ${result}`;
+}
+
+main();
+```
+
+`main.ts`の 1 行目が WASM ESM Integration によって実現した記述ですね。あたかも WASM ファイルから何もせずに`add`関数を読み込んでいるような見た目になっています。
+
+この状態で`pnpm run dev`して Vite 開発サーバを立ち上げてみましょう。
+開いたページで「add(1, 2) = 3」と表示されていれば、見事 WASM が読み込めたようです。
 
 ### `allowArbitraryExtensions`の設定をする
 
