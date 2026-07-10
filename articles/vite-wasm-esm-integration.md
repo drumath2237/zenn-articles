@@ -220,6 +220,22 @@ main();
 
 ### `allowArbitraryExtensions`の設定をする
 
+それではこのプロジェクトをビルドしてみましょう。すると次のようなエラーが出てしまいます。
+Vite では WASM を直接インポートできるので`vite dev`や`vite build`は問題なく動作します。しかし TypeScript は`.wasm`ファイルから export された関数が何なのか把握できないので、型チェックでエラーになってしまうんですね。
+
+```sh:型チェックでエラーになる
+pnpm build
+
+$ tsc && vite build
+src/main.ts:1:10 - error TS2305: Module '"*.wasm"' has no exported member 'add'.
+
+1 import { add } from "../wasm/math_wasm.wasm";
+           ~~~
+
+
+Found 1 error in src/main.ts:1
+```
+
 ## おわりに
 
 ### 参考文献
