@@ -38,11 +38,11 @@ https://vite.dev/guide/features#esm-integration
 検証環境を次に示します。
 
 - Windows 11 Home
-- Vite 8.1.0
+- Vite 8.1.5
 - Node.js 24.16.0
 - Cargo 1.96.0
   - `wasm32-unknown-unknown`ターゲット
-- Google Chrome for Windows 149.0.7827.199
+- Google Chrome for Windows 150.0.7871.129
 
 また、検証したプロジェクトを GitHub で公開していますので、合わせてご参考ください。
 
@@ -225,7 +225,6 @@ Vite では WASM を直接インポートできるので`vite dev`や`vite build
 
 ```sh:型チェックでエラーになる
 pnpm build
-
 $ tsc && vite build
 src/main.ts:1:10 - error TS2305: Module '"*.wasm"' has no exported member 'add'.
 
