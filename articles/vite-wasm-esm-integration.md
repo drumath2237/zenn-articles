@@ -254,6 +254,8 @@ export function add(a: number, b: number): number;
 
 このオプションは JS/TS が型を判別できない拡張子のファイルに対し、同じフォルダに`<ファイル名>.d.<拡張子>.ts`という名前で型定義を書くと、それがコンパイラに認識されるというものです。TypeScript 5 から使えるようです。
 
+https://www.typescriptlang.org/tsconfig/#allowArbitraryExtensions
+
 この状態で改めてビルドを実行してみると無事成功します。
 Vite のプレビューを開くと、ブラウザで「add(1, 2) = 3」と表示されているはずです。
 
@@ -261,4 +263,23 @@ Vite のプレビューを開くと、ブラウザで「add(1, 2) = 3」と表�
 
 ## おわりに
 
+Vite 8.1 でサポートされた WebAssembly ESM Integration についてご紹介しました。
+WASM の関数を普通の ESM のように import できるのは気軽でいい反面、tsc の型エラーを解決するために手動で型定義を追加するのは少し不便ですね。
+
+例えば Rust と TypeScript の両方のコードをモノレポで扱うようなプロジェクトでは Rust 側のシグネチャが変わるごとに型定義も追従する手間があるので、そういう時は素直に wasm-bindgen を使うのが良さそうです。
+逆に、WASM は別のプロジェクトから借りてきたものをファイルベースで参照しており、更新頻度が高くないのであれば相性が良さそうです。
+
+いずれにせよ、WASM を使いやすくなる選択肢が増えることはいいことですので、なにかマッチするケースがあれば使ってみたいと思いました。
+最後まで読んでいただきありがとうございました。
+
 ### 参考文献
+
+https://github.com/drumath2237/vite8-wasm-esmodule-sandbox
+
+https://vite.dev/blog/announcing-vite8-1
+
+https://ja.vite.dev/guide/features#esm-integration
+
+@[card](https://github.com/WebAssembly/esm-integration/blob/main/proposals/esm-integration/README.md)
+
+https://www.typescriptlang.org/tsconfig/#allowArbitraryExtensions
