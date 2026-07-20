@@ -40,6 +40,7 @@ https://vite.dev/guide/features#esm-integration
 - Windows 11 Home
 - Vite 8.1.5
 - Node.js 24.16.0
+- TypeScript 7.0.2
 - Cargo 1.96.0
   - `wasm32-unknown-unknown`ターゲット
 - Google Chrome for Windows 150.0.7871.129
@@ -205,8 +206,6 @@ function main() {
   }
 
   const result = add(1, 2);
-  console.log(result);
-
   app.textContent = `add(1, 2) = ${result}`;
 }
 
@@ -231,9 +230,34 @@ src/main.ts:1:10 - error TS2305: Module '"*.wasm"' has no exported member 'add'.
 1 import { add } from "../wasm/math_wasm.wasm";
            ~~~
 
-
 Found 1 error in src/main.ts:1
 ```
+
+これを回避するにはいくつか方法がありますが、[Vite の公式ガイド](https://ja.vite.dev/guide/features#esm-integration)にも書いてある`allowArbitraryExtensions`を有効化する方法をここでは使ってみます。
+
+まずは`/tsconfig.json`を編集し、次のように`compilerOptions.allowArbitraryExtensions`を true に設定します。
+
+```json:tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "allowArbitraryExtensions": true
+  },
+}
+```
+
+続いて `/wasm/math_wasm.d.wasm.ts`ファイルを作成し、次のように編集します。
+
+```ts:math_wasm.d.wasm.ts
+export function add(a: number, b: number): number;
+```
+
+このオプションは JS/TS が型を判別できない拡張子のファイルに対し、同じフォルダに`<ファイル名>.d.<拡張子>.ts`という名前で型定義を書くと、それがコンパイラに認識されるというものです。TypeScript 5 から使えるようです。
+
+この状態で改めてビルドを実行してみると無事成功します。
+Vite のプレビューを開くと、ブラウザで「add(1, 2) = 3」と表示されているはずです。
+
+![result](/images/vite-wasm-esm-integration/result.png)
 
 ## おわりに
 
