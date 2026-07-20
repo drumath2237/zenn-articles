@@ -3,7 +3,7 @@ title: "Vite 8.1の新機能、WebAssembly ESM Integrationについて"
 emoji: "🌈"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["vite", "wasm", "esmodule", "javascript"]
-published: false
+published: true
 ---
 
 ## はじめに
